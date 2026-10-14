@@ -37,4 +37,3 @@ include(joinpath(@__DIR__, "..", "scripts", "setup_env.jl"))
         @test Base.active_project() == active
     end
 end
-

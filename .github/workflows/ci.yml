@@ -36,4 +36,3 @@ jobs:
           julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" -e 'using SpaceAGORAEDG, SpaceAGORA; @assert SpaceAGORA.EDGServices.available()'
       - name: Installation leaves the companion unchanged
         run: git diff --exit-code
-

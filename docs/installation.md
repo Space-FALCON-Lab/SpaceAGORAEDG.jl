@@ -93,4 +93,3 @@ Maintainers complete publication in this order:
    asset and validation records used to make that decision.
 
 No guessed, floating or unpublished revision serves as a release pin.
-
