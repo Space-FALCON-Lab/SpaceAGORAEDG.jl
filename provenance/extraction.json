@@ -1,0 +1,34 @@
+{
+  "source_repository": "Space-FALCON-Lab/SpaceAGORA.jl",
+  "source_revision": "0f486534022bc35c1e8f0f309d73e6db64be5d69",
+  "source_tree": "dfb2be82900916e5fd8cc296bdbcb2921dfdc63c",
+  "experimental_policy_revision": "b13bec3bc2fbf4e43903199d2176f9973668524b",
+  "files": {
+    "heat_rate.jl": "6a33347fc4647b2a53cb66b3a9ee2bb0e8a5bdca3893a112a3ba54224ab5cd3f",
+    "heat_load.jl": "946678f167c11811ae3ed036e49ced3ffda2c8b35c99f46c89c88b682bd2d9a1",
+    "structural_load.jl": "827a896e7e89e4e6f69858a1cae8f995d7d89067212dc12833f71db8ec15f66b",
+    "targeting.jl": "e9df838b12f23ea9cda542e060a6a1929d76c9a962c06bb351758c56db9d4e90",
+    "targeting_plan.jl": "f2a5e7ac03d44c94c08a389272d98a4b675928796ee3d95eaa0300e8cb6ee9d7",
+    "pass_heat.jl": "d52bc31c967c80d4bebe6a47cce5c76f914d90d5d973ff1b1e411df74f5a7b01",
+    "guidance_decision.jl": "0762a029b19583fc18402c91c92a58e5e79f802dcebf9892bd9a94fd18053a58",
+    "angle_decision.jl": "1479436b779c8d9239eac8e965ec07992b564a26159fe07de1c6c8f916633f46"
+  },
+  "adaptations": "Only supported value projections and core-owned queries replace private engine access; constants and numerical policy are preserved.",
+  "extracted_files": {
+    "heat_rate.jl": "e10461bc981cac78e7bf29206ad2c7622fd8a1d717a43e0ec3453d0b7323de38",
+    "heat_load.jl": "ee669c25d69db9c59bbcca84f97c2ef39c2cc4212ee0d0e18199c2abe3b7862a",
+    "structural_load.jl": "d9ae3d751ca911b1f56a6a35bbf5e237613d4af8cb98e6c5c3a776d2b54391f8",
+    "targeting.jl": "fbade2262d0ac68998844572d3ccb66413691e75c72482638fca5915fe3c916c",
+    "targeting_plan.jl": "e3c238f919956aa4804642cb8acb6747bb48f35f847cb216f32421699ac3955d",
+    "pass_heat.jl": "d52bc31c967c80d4bebe6a47cce5c76f914d90d5d973ff1b1e411df74f5a7b01",
+    "guidance_decision.jl": "817fcddece467edbc801794dc35e5a30090b6f7c6326b09f4e5bd4fa1f4a3227",
+    "angle_decision.jl": "fea4a226b97fb495e5ddcd684a991e7b5a6551da0cd52a27a33d6046ce52c247"
+  },
+  "service_adaptations": [
+    "ODEParams annotations replaced by the abstract leased prediction context.",
+    "Direct planet, thermal, entry-altitude and spacecraft reads replaced by immutable value queries.",
+    "Configured gravity, scale-height and frame-state helpers delegated to the existing core equations.",
+    "EDGControlDecision retains a single core-owned type identity.",
+    "No numerical constants, control cadence, comparison branches or interpolation arithmetic changed."
+  ]
+}

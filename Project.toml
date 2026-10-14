@@ -1,0 +1,26 @@
+name = "SpaceAGORAEDG"
+uuid = "a782e8ee-96d7-4dd6-8231-bb64649e6ad4"
+version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+NLsolve = "2774e3e8-f4cf-5e23-947b-6d7e65073b56"
+Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
+SpaceAGORA = "afbfb69f-5c0b-4832-b760-43725dff8540"
+SpecialFunctions = "276daf66-3868-5448-9aa4-cd146d93841b"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[compat]
+LinearAlgebra = "1.12"
+NLsolve = "4"
+Roots = "2, 3"
+SpaceAGORA = "0.2"
+SpecialFunctions = "2"
+StaticArrays = "1"
+julia = "1.12"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

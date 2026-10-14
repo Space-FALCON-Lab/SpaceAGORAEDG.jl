@@ -1,0 +1,7 @@
+# Immutable core facade revision published for this companion candidate.
+# Final merge and experimental release require the recorded pair validation.
+url = "https://github.com/Space-FALCON-Lab/SpaceAGORA.jl.git"
+uuid = "afbfb69f-5c0b-4832-b760-43725dff8540"
+version_family = "0.2"
+contract_version = "1.0.0"
+rev = "cba8760464089e30713e271d96a1553abad94a83"

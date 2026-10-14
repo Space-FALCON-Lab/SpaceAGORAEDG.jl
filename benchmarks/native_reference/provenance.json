@@ -1,0 +1,56 @@
+{
+  "scope": "Retained native comparison drivers; path plumbing only. The original comparison and metadata labels are retained; runtime_source_modified=true describes the historical extraction candidate and is not a clean-checkout assertion. Record the actual core/companion commits and working-tree status separately for every new run.",
+  "retained_core_runtime": "0f486534022bc35c1e8f0f309d73e6db64be5d69",
+  "private_core_fixture": {
+    "path": "test/gnc/aerobraking/energy_depletion_gnc_tests.jl",
+    "sha256": "335b3891f41beadae2049fa487365363b9c839c37d70247cba5317d0435b49db"
+  },
+  "retained_input_sha256": {
+    "refresh_comparison.jl": "86ce66f43d3e4a8629032ead017e1452e6d08611a5344d8f9d3e2c666f0eca6e",
+    "native_direct.jl": "e75f34e733f1074e12fa3a09c44e24d1efa1d8e500389672dc29f0241df18f2b",
+    "load_ephemerides.jl": "7647a69ec226756b3439f1c403ad32ab45a716f99c025fd9e955333626140797",
+    "observer_comparison_cases.jl": "c603b833814551e3b2854ba11da8cc8f0bcbe24848740c8befaa4dade7c14edf"
+  },
+  "bridge_source_sha256": "e4ef72a937fbc5bdb8776a2e5b9e5240be2f194195f60e7ef6a240b0f204296f",
+  "path_substitutions": [
+    "Core checkout: EDG_CORE_PATH",
+    "Native bridge library: EDG_NATIVE_LIBRARY",
+    "Authorized GRAM asset tree: EDG_GRAM_ASSET_ROOT",
+    "Fresh separate output directory: EDG_OUTPUT_DIR",
+    "Recipe includes remain relative to this benchmark directory"
+  ],
+  "native_bridge_build": {
+    "platform": "macOS arm64",
+    "compiler": "Apple clang 21.0.0",
+    "standard": "C++11",
+    "mode": "dynamic library",
+    "include_directories": [
+      "<GRAM_SOURCE>/Mars/include",
+      "<GRAM_SOURCE>/common/include"
+    ],
+    "link_input": "<GRAM_SOURCE>/Build/lib/libGRAM.dylib",
+    "rpath": "<GRAM_SOURCE>/Build/lib",
+    "historical_build_exit_code": 0,
+    "retained_library_sha256": "d3ef3ee996b2fb502db6f5ad34d3be7d805c1d7eec94f5cf7aa4dc76a8b24823"
+  },
+  "scientific_settings": {
+    "guidance_hz": 3,
+    "control_hz": 3,
+    "target_radius_m": 19780944.9723878,
+    "epoch_utc": "2001-11-06T19:00:00",
+    "seed": 20261009,
+    "perturbation_scale": 1.5,
+    "minimum_relative_step_size": 0.5,
+    "mola_heights": false,
+    "wind": false,
+    "topography": false,
+    "heat_rate_limit_w_cm2": 0.15,
+    "heat_load_limit_j_cm2": 30.0,
+    "structural_proxy_limit_pa": 0.5,
+    "relative_absolute_tolerances": 1e-10,
+    "maximum_atmospheric_step_s": 0.025,
+    "maximum_coast_step_s": 20.0
+  },
+  "historical_extraction_runtime_manifest_sha256": "de4676b3e12d10bb9eff8a07de7211fe67b7ca6afc571c56bf58ef5c7d91adc6",
+  "current_runtime_manifest_sha256": "59df0e84459abf746b31660eb1132a193ebc6dc1074c8a318151bea549cb0b87"
+}
