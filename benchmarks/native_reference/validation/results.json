@@ -1,0 +1,118 @@
+{
+  "recorded_utc": "2026-10-14T02:39:21.186620+00:00",
+  "scope": "Bounded experimental native comparison. Saved samples do not bound continuous-time peaks; no arbitrary-target or journal-reproduction claim.",
+  "source": {
+    "frozen_runtime_core_publication": "fbfe436264e651050435c8e65569496f49cb5dae",
+    "frozen_runtime_companion_publication": "a35549478fd7a38930d710a70419b537aa505121",
+    "runtime_manifest_sha256": "59df0e84459abf746b31660eb1132a193ebc6dc1074c8a318151bea549cb0b87",
+    "integrated_reference_runtime": "0f486534022bc35c1e8f0f309d73e6db64be5d69",
+    "source_files_unchanged_during_runs": 325,
+    "private_fixture": {
+      "path": "test/gnc/aerobraking/energy_depletion_gnc_tests.jl",
+      "sha256": "335b3891f41beadae2049fa487365363b9c839c37d70247cba5317d0435b49db"
+    },
+    "retained_driver_sha256": {
+      "refresh_comparison.jl": "86ce66f43d3e4a8629032ead017e1452e6d08611a5344d8f9d3e2c666f0eca6e",
+      "native_direct.jl": "e75f34e733f1074e12fa3a09c44e24d1efa1d8e500389672dc29f0241df18f2b",
+      "load_ephemerides.jl": "7647a69ec226756b3439f1c403ad32ab45a716f99c025fd9e955333626140797",
+      "observer_comparison_cases.jl": "c603b833814551e3b2854ba11da8cc8f0bcbe24848740c8befaa4dade7c14edf"
+    },
+    "recipe_provenance": "../provenance.json"
+  },
+  "environment": {
+    "julia": "1.12.3",
+    "platform": "macOS arm64",
+    "julia_threads": 1,
+    "openblas_threads": 1,
+    "native_inputs": "Authorized existing Mars GRAM assets and library; no native model data included in this repository."
+  },
+  "scientific_settings": {
+    "guidance_hz": 3,
+    "control_hz": 3,
+    "target_radius_m": 19780944.9723878,
+    "epoch_utc": "2001-11-06T19:00:00",
+    "seed": 20261009,
+    "perturbation_scale": 1.5,
+    "minimum_relative_step_size": 0.5,
+    "mola_heights": false,
+    "wind": false,
+    "topography": false,
+    "heat_rate_limit_w_cm2": 0.15,
+    "heat_load_limit_j_cm2": 30.0,
+    "structural_proxy_limit_pa": 0.5,
+    "relative_absolute_tolerances": 1e-10,
+    "maximum_atmospheric_step_s": 0.025,
+    "maximum_coast_step_s": 20.0
+  },
+  "comparison": {
+    "csv": "exact bytes",
+    "scientific_metadata": "all33 keys equal",
+    "excluded_metadata": [
+      "candidate",
+      "elapsed_s",
+      "runtime_source_modified"
+    ]
+  },
+  "cases": [
+    {
+      "case": "depletion",
+      "rows": 19447,
+      "csv_sha256": "69cc37003487ecd15aa5334563f15a4f3fdf19467ae560972a9dcf3f28d4fdf0",
+      "matches_integrated_csv_bytes": true,
+      "status": "completed",
+      "retcode": "Terminated",
+      "endpoint": "first post-exit apoapsis",
+      "endpoint_time_s": 19137.29104826968,
+      "endpoint_source": "TOML event and completion records",
+      "last_csv_sample_s": 19130.0,
+      "peak_sampled_panel_heat_rate_w_cm2": 0.15137451241766942,
+      "sampled_heat_limit_violations": 2557,
+      "peak_sampled_structural_proxy_pa": 0.46476249152518223,
+      "guidance_hz": 3,
+      "control_hz": 3
+    },
+    {
+      "case": "targeting",
+      "rows": 19439,
+      "csv_sha256": "6f405976bf635f725c09f8a76ad6e019178a8d639df77577903c2a8b060ca66c",
+      "matches_integrated_csv_bytes": true,
+      "status": "completed",
+      "retcode": "Terminated",
+      "endpoint": "first post-exit apoapsis",
+      "endpoint_time_s": 19278.492830074803,
+      "endpoint_source": "TOML event and completion records",
+      "last_csv_sample_s": 19250.0,
+      "peak_sampled_panel_heat_rate_w_cm2": 0.004901645407919217,
+      "sampled_heat_limit_violations": 0,
+      "peak_sampled_structural_proxy_pa": 0.291009318667449,
+      "guidance_hz": 3,
+      "control_hz": 3,
+      "fixed_target_radius_m": 19780944.9723878,
+      "actual_apoapsis_radius_m": 19780944.97007846,
+      "actual_radius_error_m": -0.0023093409836292267,
+      "planning_times_s": [
+        3.0,
+        5.0,
+        7.0
+      ],
+      "command_switch_s": 8.0
+    },
+    {
+      "case": "two_pass",
+      "rows": 38624,
+      "csv_sha256": "f3bcc729f78f927e5a649a70402898029118e6b254835748df2ac7aa3ea32860",
+      "matches_integrated_csv_bytes": true,
+      "status": "completed",
+      "retcode": "Terminated",
+      "endpoint": "second atmospheric exit",
+      "endpoint_time_s": 57779.85596242022,
+      "endpoint_source": "TOML event and completion records",
+      "last_csv_sample_s": 57779.85596242022,
+      "peak_sampled_panel_heat_rate_w_cm2": 0.15101616175344842,
+      "sampled_heat_limit_violations": 3570,
+      "peak_sampled_structural_proxy_pa": 0.37818754923352293,
+      "guidance_hz": 3,
+      "control_hz": 3
+    }
+  ]
+}

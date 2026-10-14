@@ -1,6 +1,6 @@
 # Scientific status
 
-SpaceAGORAEDG is being qualified for a bounded experimental release. This scope
+SpaceAGORAEDG has a bounded experimental scope. This scope
 allows a reproducible package and adapter to be delivered while retaining
 known limitations. It does not certify every trajectory or establish exact
 reproduction of the published figures.
@@ -46,9 +46,11 @@ peak panel heat rates were respectively 0.15137451241766942 and
 violations. Counts and maxima taken from saved samples do not bound an
 unobserved continuous-time peak.
 
-Those trajectories qualify that identified integration candidate. They do not
-automatically qualify a later package revision. The release validation record
-must identify the final core/companion pair, the rerun cases and their results.
+Those trajectories identify the pre-extraction reference. The
+[validation record](validation.md) describes the subsequent companion reruns,
+source composition and installation checks. Historical trajectories alone do
+not qualify a later package revision; keep the exact source pair with the
+evidence for a new study.
 
 ## What remains open
 

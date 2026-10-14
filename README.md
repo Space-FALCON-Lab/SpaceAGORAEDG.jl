@@ -29,6 +29,9 @@ constraint satisfaction or exact reproduction of the journal results. Read
 4. Use [Extending a study](docs/extension_guide.md) to change a case while preserving
    a comparison you can interpret.
 
+The [validation record](docs/validation.md) identifies the tested source,
+native comparisons and independent agent walkthroughs, including their limits.
+
 Installing this package does not provide NASA GRAM model data. Native-GRAM
 studies require separately available, authorized model data. The standard
 SpaceAGORA atmosphere route uses a configured GRAMSuite installation; the retained

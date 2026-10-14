@@ -39,6 +39,22 @@ state from the original input while preserving the shared guidance/control
 relationship inside the run. The heat-rate estimate printed by this example
 is not an independent measurement of every propagated panel's thermal load.
 
+This example keeps its output in memory: `results=false` disables result files,
+and `generate_plots=false` disables plots. Inspect `result.table.time` to see the
+saved elapsed times in seconds. The short run saves its start and requested end;
+two rows do not describe every solver step or controller update. A normal return
+and a final saved time of 2 seconds establish completion of this small example,
+not completion of an atmospheric passage.
+
+The `sc1_pos_*` and `sc1_vel_*` columns contain inertial position in metres and
+velocity in metres per second. The configured epoch is 1 January 2024. The
+`sc1_heat_rate` and `sc1_heat_load` columns are propagated whole-spacecraft
+thermal summaries and may include the bus; they are not the printed EDG
+controller estimate or an isolated history of the controlled panels. See the
+core [output-column guide](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/05de98e3463eeb519d5784429ef641012cf0abf4/docs/src/user/outputs.md#csv-column-reference)
+for units and aggregation. Keep the configuration and exact package revisions
+with any saved table; the table alone does not identify the model or source.
+
 ## Make one bounded change
 
 The example exposes `duration_s` so the installation walkthrough can be extended
@@ -64,12 +80,12 @@ is not a feasibility test.
 ## Add models through core interfaces
 
 New atmospheres, force models and outputs belong at SpaceAGORA's documented
-model interfaces. See [Add a density model](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/388b8801b3e912c264b04a462b019acbaf1c0d1a/docs/src/extensibility.md#add-a-density-model)
-and the [density-model template](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/388b8801b3e912c264b04a462b019acbaf1c0d1a/templates/density_model_template.jl)
+model interfaces. See [Add a density model](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/05de98e3463eeb519d5784429ef641012cf0abf4/docs/src/extensibility.md#add-a-density-model)
+and the [density-model template](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/05de98e3463eeb519d5784429ef641012cf0abf4/templates/density_model_template.jl)
 for the public `SpaceAGORA.AbstractDensityModel` and `SpaceAGORA.getDensity`
-interface, or the [custom-force walkthrough](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/388b8801b3e912c264b04a462b019acbaf1c0d1a/docs/src/user/custom_effector.md)
+interface, or the [custom-force walkthrough](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/05de98e3463eeb519d5784429ef641012cf0abf4/docs/src/user/custom_effector.md)
 for a force/torque component. These interface references are pinned to the
-upstream base retained by this extraction. Supply models through
+supported core revision recorded in `CoreSource.toml`. Supply models through
 `SimulationConfiguration`; the EDG
 prediction services then use the configured core queries. Do not reach into
 `ODEParams`, replace private core methods or retain a borrowed prediction handle.

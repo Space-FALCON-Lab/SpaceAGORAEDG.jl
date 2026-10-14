@@ -45,11 +45,11 @@ the companion explicitly, and keeps the environment outside both source trees.
 It reuses its own unchanged setup and refuses an existing unmanaged environment.
 A Julia project may download ordinary package dependencies during setup.
 
-The immutable core revision is published in `CoreSource.toml`. This is the
-review candidate; the versioned experimental release will identify the final
-qualified pair after installation, scientific comparisons and hosted checks
-complete. A package version range alone is not evidence that an arbitrary
-core revision is compatible.
+The immutable core revision is published in `CoreSource.toml`. The
+[validation record](validation.md) distinguishes native comparisons, integration
+review and installation walkthroughs. The versioned release identifies the
+final qualified pair after hosted checks and merge approval. A package version
+range alone is not evidence that an arbitrary core revision is compatible.
 
 ## Working on both packages
 
