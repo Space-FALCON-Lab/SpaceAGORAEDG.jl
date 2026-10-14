@@ -1,0 +1,9 @@
+# Generated Julia environment and coverage files
+/Manifest.toml
+*.cov
+*.jl.mem
+# Example output and local developer environments
+/output/
+/.julia/
+/.local/
+.DS_Store
