@@ -55,9 +55,11 @@ There is one active numerical implementation.
 SpaceAGORA continues to own the integrator, physical heat integrals, atmosphere
 and frame services, callback ordering and panel actuation. The companion does
 not advance or replace the simulator’s physical state or reset physical heat. SpaceAGORA
-no longer carries the older E-EDG and T-EDG strategy routes (removed in
-[SpaceAGORA PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352));
-this package is the only EDG implementation.
+removed the older E-EDG and T-EDG strategy routes in
+[SpaceAGORA PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352); from
+that change on, this package is the only EDG implementation. The core revision pinned
+in `CoreSource.toml` predates it and still contains the older routes, which this
+package does not use.
 
 ## Publications and license
 

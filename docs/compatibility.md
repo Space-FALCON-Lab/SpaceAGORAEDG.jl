@@ -66,11 +66,13 @@ model or create a different prediction atmosphere.
 | Panels on moving articulated bodies | Outside the supported kinematic panel-control route. |
 | Arbitrary-target accuracy, continuous feasibility, real-time throughput | Not established by this release. |
 
-SpaceAGORA removed its older E-EDG and T-EDG strategy routes
-([PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352)). Shared
-typed numerical helpers in core forward to this package, so a helper name in
-core is not a second implementation. Private compatibility helper names support
-existing callers and tests; they are not a general extension API.
+SpaceAGORA removed its older E-EDG and T-EDG strategy routes in
+[PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352). The core
+revision pinned in `CoreSource.toml` predates that change and still contains
+them; this package does not use them. Shared typed numerical helpers in core
+forward to this package, so a helper name in core is not a second
+implementation. Private compatibility helper names support existing callers and
+tests; they are not a general extension API.
 
 A change to equations, limits, timing, frame conventions, atmosphere query
 semantics or state ownership needs its own review and comparison evidence.
