@@ -12,7 +12,7 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 
 [compat]
 LinearAlgebra = "1.12"
-NLsolve = "4"
+NLsolve = "4, 5"
 Roots = "2, 3"
 SpaceAGORA = "0.2"
 SpecialFunctions = "2"
