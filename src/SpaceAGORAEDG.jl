@@ -1,7 +1,7 @@
 """Experimental energy-depletion guidance through SpaceAGORA's versioned services."""
 module SpaceAGORAEDG
 import SpaceAGORA
-const REQUIRED_CONTRACT_VERSION = v"1.0.0"
+const REQUIRED_CONTRACT_VERSION = v"2.0.0"
 isdefined(SpaceAGORA, :EDGServices) || error("SpaceAGORAEDG requires a SpaceAGORA build with EDGServices. Install the documented exact package pair and start a fresh process.")
 SpaceAGORA.EDGServices.require_version(REQUIRED_CONTRACT_VERSION)
 using LinearAlgebra, StaticArrays, Roots, SpecialFunctions, NLsolve

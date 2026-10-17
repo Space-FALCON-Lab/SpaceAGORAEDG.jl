@@ -5,7 +5,7 @@ using Test
     source = joinpath(@__DIR__, "..", "src", "SpaceAGORAEDG.jl")
     for (fixture, expected) in (
         ("module SpaceAGORA\nend\n", "requires a SpaceAGORA build with EDGServices"),
-        ("module SpaceAGORA\nmodule EDGServices\nrequire_version(v) = error(\"fixture unsupported contract: \" * string(v))\nend\nend\n", "fixture unsupported contract: 1.0.0"),
+        ("module SpaceAGORA\nmodule EDGServices\nrequire_version(v) = error(\"fixture unsupported contract: \" * string(v))\nend\nend\n", "fixture unsupported contract: 2.0.0"),
     )
         mktempdir() do directory
             path = joinpath(directory, "SpaceAGORA", "src")
