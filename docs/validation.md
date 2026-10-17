@@ -119,3 +119,60 @@ project for the two EDG examples, retaining the original smoke settings and
 isolated load path. A focused subprocess regression passed 16 assertions and
 reproduced the original missing-package error when run against the old launcher.
 The repaired source pair still requires fresh hosted checks.
+
+## NLsolve 5
+
+`Project.toml` accepts NLsolve 4 and 5 (`NLsolve = "4, 5"`). NonlinearSolve
+4.28.1 and later accept only NLsolve 5, so with NLsolve 4 alone an environment
+holding this package had to keep NonlinearSolve at 4.28.0 or older.
+
+The package calls NLsolve in one place: the heat-load TPBVP shooting in
+`src/heat_load.jl`, used only with `heat_load_switch_solver = :tpbvp_integration`.
+That call uses the trust-region method with its own Jacobian and passes no
+`autodiff` argument, so the NLsolve 5 interface change does not reach it. From
+NLsolve 4.5.1 to 5.0.1 the trust-region solver changes only its column-scaling
+guard, which now also resets a scale whose square underflows. A shooting
+solution is accepted only when the scaled infinity norm of its terminal-costate
+residual is at most `1e-3` (`_EDG_HEAT_LOAD_SHOOTING_RESIDUAL_TOL`); otherwise
+the run stops with an error. That tolerance applies to the residual, not to the
+trajectory, so the comparison below records differences rather than testing
+them against a threshold.
+
+The checks ran on macOS arm64 with Julia 1.12.7 and SpaceAGORA main
+`ed834687f`, in four environments:
+
+| Environment | Built from | NLsolve | NonlinearSolve | NLSolversBase | LineSearches |
+|---|---|---|---|---|---|
+| Before | core's EDG setup (root manifest), this package's `main` | 4.5.1 | 4.28.0 | 7.10.0 | 7.5.1 |
+| Widened | the same setup with this change | 4.5.1 | 4.28.0 | 7.10.0 | 7.5.1 |
+| NLsolve moved | the widened environment with only these four packages moved | 5.0.1 | 4.32.0 | 8.0.1 | 7.8.2 |
+| Fresh | core and this package resolved without a manifest | 5.0.1 | 4.32.0 | 8.0.1 | 7.8.2 |
+
+The fresh environment also differs from the root manifest in 102 other
+packages: 100 at other versions and 2 not installed. Each environment ran
+core's suite 00 (the EDG suite, including its `:tpbvp_integration` control
+tests), this package's tests and the Odyssey energy-depletion example
+(heat-load phase, native Mars GRAM) with both heat-load solvers. Suite 00 passed
+2,357 of 2,357 assertions and the package tests 41 of 41 in every environment,
+with the same per-testset counts.
+
+- Widened: the manifest equals the one before apart from this package's path.
+  Both example runs write byte-identical `simulation_results.csv` files.
+- NLsolve moved: both example runs, closed form and TPBVP, again write
+  byte-identical files. The TPBVP run solves the same heat-load switches and
+  follows the same trajectory as with NLsolve 4.5.1.
+- Fresh: both example runs complete, so every shooting solve met the `1e-3`
+  acceptance, and the solved switches are identical. Both trajectories differ
+  from the ones before, including the closed-form run, which never calls
+  NLsolve. The first difference appears at round-off level just after
+  atmospheric entry and grows through the heat-load security switching, where
+  the panel command changes at different samples. Because the NLsolve-moved
+  environment reproduces the earlier files byte for byte, these differences
+  come from the other package updates, not from NLsolve.
+
+These are runs of one case on one machine. They show that NLsolve 5 reproduces
+this case's shooting solution; they do not establish behavior for other
+atmospheres, vehicles or targets. The companion workflow still installs the core
+revision in `CoreSource.toml`, which itself requires NLsolve 4, so the hosted
+checks keep using NLsolve 4 until that pin moves to a core revision that no
+longer depends on NLsolve.
