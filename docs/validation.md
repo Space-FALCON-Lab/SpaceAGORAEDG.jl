@@ -172,7 +172,6 @@ with the same per-testset counts.
 
 These are runs of one case on one machine. They show that NLsolve 5 reproduces
 this case's shooting solution; they do not establish behavior for other
-atmospheres, vehicles or targets. The companion workflow still installs the core
-revision in `CoreSource.toml`, which itself requires NLsolve 4, so the hosted
-checks keep using NLsolve 4 until that pin moves to a core revision that no
-longer depends on NLsolve.
+atmospheres, vehicles or targets. The core revisions pinned since contract 2.0.0
+no longer depend on NLsolve, so the companion workflow's installation now resolves
+NLsolve 5.
