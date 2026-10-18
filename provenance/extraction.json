@@ -1,4 +1,5 @@
 {
+  "record": "The source fields and files record the core sources extracted at source_revision; extracted_files records this package's files as extracted, unchanged through v0.1.0. Later changes are listed in revisions, oldest first: a file's current SHA-256 is its entry in the latest revision that lists it, or else its extracted_files entry.",
   "source_repository": "Space-FALCON-Lab/SpaceAGORA.jl",
   "source_revision": "0f486534022bc35c1e8f0f309d73e6db64be5d69",
   "source_tree": "dfb2be82900916e5fd8cc296bdbcb2921dfdc63c",
@@ -30,5 +31,18 @@
     "Configured gravity, scale-height and frame-state helpers delegated to the existing core equations.",
     "EDGControlDecision retains a single core-owned type identity.",
     "No numerical constants, control cadence, comparison branches or interpolation arithmetic changed."
+  ],
+  "revisions": [
+    {
+      "version": "0.2.0",
+      "contract_version": "2.0.0",
+      "reason": "EDGServices contract 2.0.0: guidance_decision! and control_decision! take the EDG state before the configuration, and _edg_environment_state and _edg_targeting_control_clock take the prediction context first. Argument order only; no numerical change.",
+      "files": {
+        "angle_decision.jl": "3d6bda9ab9dd2a3ccc42df08636b904751046851392eb6d8e0277d67a4cc196c",
+        "guidance_decision.jl": "714f996eafdbd144eefb0b98e9316fd23a25d06a1b8a082b3378d6ec820bcb5f",
+        "targeting.jl": "62626a433cc3beded9a32f1f803ae025c61a95cd469ee604eb58ff9b80bca7fa",
+        "targeting_plan.jl": "34aff0782cae017f277f20acea7582c8c1836dc91d4e56e89caaffc659108e78"
+      }
+    }
   ]
 }
