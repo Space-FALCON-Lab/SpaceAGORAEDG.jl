@@ -191,7 +191,7 @@ end
 # PeriodicCallback uses its solve-start clock, including when a prediction starts
 # between control ticks. Never stretch the command grid to fit its horizon.
 
-_edg_targeting_control_period(config, p) = _edg_targeting_control_clock(config, p).period
+_edg_targeting_control_period(config, p) = _edg_targeting_control_clock(p).period
 
 @inline function _edg_switch_due(t::Float64, switch_s::Float64)
     # Equal callback ticks may differ by a few floating-point ulps.
@@ -355,7 +355,7 @@ function _edg_integrated_targeting_trajectory(
     positions[1] = pos0
     velocities[1] = vel0
     alpha_past = Float64(spacecraft.links[first(config.controlled_panel_links)].α)
-    control_clock = _edg_targeting_control_clock(config, p)
+    control_clock = _edg_targeting_control_clock(p)
 
     function acceleration(r, v, tau, alpha)
         gravity = _edg_prediction_gravity_acceleration(p, r, v, mass, t + tau)
@@ -459,7 +459,7 @@ function _edg_integrated_max_energy_depletion_trajectory(
     positions[1] = pos0
     velocities[1] = vel0
     alpha_past = Float64(spacecraft.links[first(config.controlled_panel_links)].α)
-    control_clock = _edg_targeting_control_clock(config, p)
+    control_clock = _edg_targeting_control_clock(p)
 
     function acceleration(r, v, tau, alpha)
         gravity = _edg_prediction_gravity_acceleration(p, r, v, mass, t + tau)
@@ -559,7 +559,7 @@ function _edg_predict_targeting_outcome(
         _edg_drag_passage_duration(config, p, pos, vel, mass) + 120.0,
         config.planning_horizon_s,
     )
-    clock = _edg_targeting_control_clock(config, p)
+    clock = _edg_targeting_control_clock(p)
     times = _edg_targeting_prediction_time_grid(duration; t0=t, period=clock.period, origin=clock.origin)
     track = _edg_integrated_targeting_trajectory(
         config,
@@ -608,7 +608,7 @@ function _edg_predict_max_energy_depletion_outcome(
         _edg_drag_passage_duration(config, p, pos, vel, mass) + 120.0,
         config.planning_horizon_s,
     )
-    clock = _edg_targeting_control_clock(config, p)
+    clock = _edg_targeting_control_clock(p)
     times = _edg_targeting_prediction_time_grid(duration; t0=t, period=clock.period, origin=clock.origin)
     heat_load_switches = (:heat_load in config.max_energy_submodes) ?
         _edg_solve_heat_load_switches(
@@ -751,7 +751,7 @@ function _edg_targeting_switch_solution(
     target_energy = state.target_energy_jkg[i]
     isfinite(target_energy) || return (switch_s=Inf, residual_jkg=NaN, status=:invalid_target, left_switch_s=NaN, right_switch_s=NaN, left_residual_jkg=NaN, right_residual_jkg=NaN)
 
-    clock = _edg_targeting_control_clock(config, p)
+    clock = _edg_targeting_control_clock(p)
     period, origin = clock.period, clock.origin
     next_tick = floor(Int, (t - origin) / period) + 1
     while _edg_switch_due(t, origin + next_tick * period)

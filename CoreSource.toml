@@ -3,5 +3,5 @@
 url = "https://github.com/Space-FALCON-Lab/SpaceAGORA.jl.git"
 uuid = "afbfb69f-5c0b-4832-b760-43725dff8540"
 version_family = "0.2"
-contract_version = "1.0.0"
-rev = "05de98e3463eeb519d5784429ef641012cf0abf4"
+contract_version = "2.0.0"
+rev = "ea63d2023c1f6541ac1fd3b250f2aa09f632e718"

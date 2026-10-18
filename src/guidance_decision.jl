@@ -53,7 +53,7 @@ function _edg_run_target_energy_bracketing!(
         _edg_switch_due(t, state.targeting_switch_s[i]) && return nothing
         _edg_replan_due(t, state.last_switch_solve_t[i], config.switch_recompute_interval_s) || return nothing
     end
-    env = _edg_environment_state(u, p, t, i)
+    env = _edg_environment_state(p, u, t, i)
     _edg_in_drag_passage(p, env) || return nothing
     sc = _edg_control_sat_state(u, i)
     pos, vel, mass = _edg_control_pos_vel_mass(sc)
@@ -76,7 +76,7 @@ function _edg_run_target_energy_bracketing!(
 end
 
 function guidance_decision!(
-    config::AerobrakingEnergyDepletionConfig, state::AerobrakingEnergyDepletionState,
+    state::AerobrakingEnergyDepletionState, config::AerobrakingEnergyDepletionConfig,
     u,
     p::AbstractPredictionContext,
     t::Float64,

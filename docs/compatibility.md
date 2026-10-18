@@ -1,7 +1,7 @@
 # Compatibility and ownership
 
 Use the exact core and companion revisions recorded for the release. The
-companion requires Julia 1.12, SpaceAGORA 0.2 and **EDGServices contract 1.0.0**.
+companion requires Julia 1.12, SpaceAGORA 0.2 or 0.3 and **EDGServices contract 2.0.0**.
 The broad package version constraint alone does not identify a qualified source
 pair. `CoreSource.toml` records the core revision used by the standalone
 installer; SpaceAGORA's optional-package gitlink records its companion revision.
@@ -29,8 +29,15 @@ repair an already partially loaded session by redefining methods.
 ## The public boundary
 
 The facade is `SpaceAGORA.EDGServices`. Its explicit implementation inventory
-contains `guidance_decision!` and `control_decision!`; its consumed-service
-inventory names the values and query operations used by this companion. Public
+contains the two decision services, which take the run's EDG state first:
+`guidance_decision!(state, config, u, p, t, spacecraft_index)` and
+`control_decision!(state, config, controlled_panel_links, u, p, t,
+spacecraft_index)`. Its consumed-service inventory names the values and query
+operations used by this companion; every query takes the prediction context `p`
+first, as in `_edg_environment_state(p, u, t, spacecraft_index)`. The
+targeting predictions read the control clock with
+`_edg_targeting_control_clock(p)`: the period and origin of the EDG control ticks
+that SpaceAGORA reported to the EDG state of the current call. Public
 configuration, state, model and `AerobrakingControlCommand` identities remain
 in core. `EDGControlDecision` carries the command, whether to apply it, the
 switch/cache action and copied diagnostics.
@@ -67,10 +74,9 @@ model or create a different prediction atmosphere.
 | Arbitrary-target accuracy, continuous feasibility, real-time throughput | Not established by this release. |
 
 SpaceAGORA removed its older E-EDG and T-EDG strategy routes in
-[PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352). The core
-revision pinned in `CoreSource.toml` predates that change and still contains
-them; this package does not use them. Shared typed numerical helpers in core
-forward to this package, so a helper name in core is not a second
+[PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352); the core
+revision pinned in `CoreSource.toml` no longer contains them. Shared typed
+numerical helpers in core forward to this package, so a helper name in core is not a second
 implementation. Private compatibility helper names support existing callers and
 tests; they are not a general extension API.
 

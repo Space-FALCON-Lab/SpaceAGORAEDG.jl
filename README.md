@@ -57,9 +57,11 @@ and frame services, callback ordering and panel actuation. The companion does
 not advance or replace the simulator’s physical state or reset physical heat. SpaceAGORA
 removed the older E-EDG and T-EDG strategy routes in
 [SpaceAGORA PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352); from
-that change on, this package is the only EDG implementation. The core revision pinned
-in `CoreSource.toml` predates it and still contains the older routes, which this
-package does not use.
+that change on, this package is the only EDG implementation.
+
+Version 0.2.0 implements `EDGServices` contract 2.0.0, whose decision services take
+the run's EDG state before the configuration. The published v0.1.0 release
+implements contract 1.0.0 with its own pinned core.
 
 ## Publications and license
 

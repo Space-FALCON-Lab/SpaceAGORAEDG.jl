@@ -158,7 +158,7 @@ function _edg_journal_targeting_plan(config, p, spacecraft, pos, vel, mass_state
             exit_position=outcome.exit_position, exit_velocity=outcome.exit_velocity,
             duration_s=outcome.duration_s, certificate=certificate)
     end
-    clock = _edg_targeting_control_clock(config, p)
+    clock = _edg_targeting_control_clock(p)
     first_switch = _edg_at_control_tick(t, clock.period, clock.origin) ? t :
         clock.origin + (floor(Int, (t-clock.origin)/clock.period)+1)*clock.period
     low = evaluate(first_switch)

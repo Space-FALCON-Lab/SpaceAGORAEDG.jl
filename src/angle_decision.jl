@@ -234,7 +234,7 @@ end
 # EDGControlDecision is the core-owned result identity from the facade.
 
 function control_decision!(
-    config::AerobrakingEnergyDepletionConfig, state::AerobrakingEnergyDepletionState,
+    state::AerobrakingEnergyDepletionState, config::AerobrakingEnergyDepletionConfig,
     controlled_panel_links::Tuple{Vararg{Int}},
     u,
     p::AbstractPredictionContext,
@@ -248,7 +248,7 @@ function control_decision!(
         end
     end
     sc = _edg_control_sat_state(u, i)
-    env = _edg_environment_state(u, p, Float64(t), i)
+    env = _edg_environment_state(p, u, Float64(t), i)
     spacecraft = spacecraft_geometry(p, i)
     pos, vel, mass = _edg_control_pos_vel_mass(sc)
     heat_load = _edg_max_heat_load_for_links(sc, controlled_panel_links)

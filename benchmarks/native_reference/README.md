@@ -14,9 +14,11 @@ for an installation check that does not require native data.
 
 ## Required source pair and inputs
 
-Use the core revision recorded in this companion's [CoreSource.toml](../../CoreSource.toml)
-and the companion revision recorded by the qualified parent. Both checkouts must
-remain available. This benchmark deliberately consumes the private core fixture
+This recipe belongs to the v0.1.0 source pair: the companion's `v0.1.0` tag and the
+core revision its `CoreSource.toml` records (`05de98e3463eeb519d5784429ef641012cf0abf4`,
+EDG contract 1.0.0). Later core revisions change the fixture it hashes, so it has not
+been refreshed for contract 2.0.0. Both checkouts must remain available. This
+benchmark deliberately consumes the private core fixture
 `test/gnc/aerobraking/energy_depletion_gnc_tests.jl` and internal observation hooks.
 Preflight checks the fixture's exact hash. These private names belong to this
 pinned research recipe; they are not additions to the public `EDGServices` API.
