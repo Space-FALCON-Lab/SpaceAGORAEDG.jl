@@ -2,6 +2,6 @@
 # Final merge and experimental release require the recorded pair validation.
 url = "https://github.com/Space-FALCON-Lab/SpaceAGORA.jl.git"
 uuid = "afbfb69f-5c0b-4832-b760-43725dff8540"
-version_family = "0.2"
+version_family = "0.3"
 contract_version = "2.0.0"
-rev = "c588eefd04b597c4a11f9f4faf28b148457de285"
+rev = "b9bee0e8e5c6b1ce1dd996c6a60ec39945b2dca5"

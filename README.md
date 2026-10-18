@@ -60,8 +60,9 @@ removed the older E-EDG and T-EDG strategy routes in
 that change on, this package is the only EDG implementation.
 
 Version 0.2.0 implements `EDGServices` contract 2.0.0, whose decision services take
-the run's EDG state before the configuration. The published v0.1.0 release
-implements contract 1.0.0 with its own pinned core.
+the run's EDG state before the configuration. Version 0.3.0 keeps that contract and
+requires SpaceAGORA 0.3 or 0.4. The published v0.1.0 release implements contract
+1.0.0 with its own pinned core.
 
 ## Publications and license
 
