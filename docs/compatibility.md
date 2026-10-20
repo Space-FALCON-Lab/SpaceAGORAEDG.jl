@@ -1,7 +1,7 @@
 # Compatibility and ownership
 
 Use the exact core and companion revisions recorded for the release. The
-companion requires Julia 1.12, SpaceAGORA 0.3 or 0.4 and **EDGServices contract 2.0.0**.
+companion requires Julia 1.12, SpaceAGORA 0.4 or 0.5 and **EDGServices contract 2.0.0**.
 The broad package version constraint alone does not identify a qualified source
 pair. `CoreSource.toml` records the core revision used by the standalone
 installer; SpaceAGORA's optional-package gitlink records its companion revision.

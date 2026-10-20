@@ -61,8 +61,9 @@ that change on, this package is the only EDG implementation.
 
 Version 0.2.0 implements `EDGServices` contract 2.0.0, whose decision services take
 the run's EDG state before the configuration. Version 0.3.0 keeps that contract and
-requires SpaceAGORA 0.3 or 0.4. The published v0.1.0 release implements contract
-1.0.0 with its own pinned core.
+requires SpaceAGORA 0.3 or 0.4; version 0.4.0 keeps it too and requires SpaceAGORA
+0.4 or 0.5. The published v0.1.0 release implements contract 1.0.0 with its own
+pinned core.
 
 ## Publications and license
 
