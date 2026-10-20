@@ -51,7 +51,7 @@ velocity in metres per second. The configured epoch is 1 January 2024. The
 `sc1_heat_rate` and `sc1_heat_load` columns are propagated whole-spacecraft
 thermal summaries and may include the bus; they are not the printed EDG
 controller estimate or an isolated history of the controlled panels. See the
-core [output-column guide](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/f7f3c0bd46c6faccb58a0d1dcb29213dc48c54bd/docs/src/user/outputs.md#column-reference)
+core [output-column guide](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/41cd1f2ef7bcd4ef51f556487911e797ca411867/docs/src/user/outputs.md#column-reference)
 for units and aggregation. Keep the configuration and exact package revisions
 with any saved table; the table alone does not identify the model or source.
 
@@ -80,10 +80,10 @@ is not a feasibility test.
 ## Add models through core interfaces
 
 New atmospheres, force models and outputs belong at SpaceAGORA's documented
-model interfaces. See [Add a density model](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/f7f3c0bd46c6faccb58a0d1dcb29213dc48c54bd/docs/src/extensibility.md#add-a-density-model)
-and the [density-model template](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/f7f3c0bd46c6faccb58a0d1dcb29213dc48c54bd/templates/density_model_template.jl)
+model interfaces. See [Add a density model](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/41cd1f2ef7bcd4ef51f556487911e797ca411867/docs/src/extensibility.md#add-a-density-model)
+and the [density-model template](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/41cd1f2ef7bcd4ef51f556487911e797ca411867/templates/density_model_template.jl)
 for the public `SpaceAGORA.AbstractDensityModel` and `SpaceAGORA.getDensity`
-interface, or the [custom-force walkthrough](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/f7f3c0bd46c6faccb58a0d1dcb29213dc48c54bd/docs/src/user/custom_effector.md)
+interface, or the [custom-force walkthrough](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/41cd1f2ef7bcd4ef51f556487911e797ca411867/docs/src/user/custom_effector.md)
 for a force/torque component. These interface references are pinned to the
 supported core revision recorded in `CoreSource.toml`. Supply models through
 `SimulationConfiguration`; the EDG
