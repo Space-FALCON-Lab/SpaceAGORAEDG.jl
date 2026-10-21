@@ -9,7 +9,9 @@ propagated trajectory is feasible or globally optimal.
 
 ## Configure one shared runtime
 
-Load both packages before running an EDG mission:
+First follow [Installation](installation.md) to prepare the paired environment.
+Start Julia with `julia --project=/path/to/edg-env`, using the destination you
+chose during setup, then load both packages:
 
 ```julia
 using SpaceAGORA
@@ -94,3 +96,8 @@ A low-drag fallback describes a command policy. It is not proof of feasibility.
 An unreachable target, an invalid sampled candidate family, an empty structural
 admissible set and a measured constraint violation are different outcomes and
 should remain distinguishable in the report.
+
+Continue with [Extending a study](extension_guide.md) to run the complete
+analytic-atmosphere example, inspect its diagnostics and change one study
+assumption at a time. The [scientific-status guide](scientific_status.md) explains
+which conclusions the retained examples support.

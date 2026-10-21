@@ -32,7 +32,7 @@ optimality remains unproved.
 
 ## What the retained native comparisons show
 
-The current-main integration comparison includes a fixed early targeting case,
+The retained integration comparison includes a fixed early targeting case,
 a depletion passage and two passages. The early target exercises replanning
 and a subsequent switch; it does not establish arbitrary-target accuracy or
 behavior near the heat-budget boundary. The two-pass case ends at the second
