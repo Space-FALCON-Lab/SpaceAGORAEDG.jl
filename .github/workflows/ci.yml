@@ -30,9 +30,21 @@ jobs:
         run: julia --startup-file=no scripts/setup_env.jl "$RUNNER_TEMP/edg-environment"
       - name: Companion tests
         run: julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" -e 'using Pkg; Pkg.test("SpaceAGORAEDG")'
-      - name: Both package load orders
+      - name: Both package load orders, and the refusal without the package
         run: |
-          julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" -e 'using SpaceAGORA; @assert !SpaceAGORA.EDGServices.available(); using SpaceAGORAEDG; @assert SpaceAGORA.EDGServices.available()'
-          julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" -e 'using SpaceAGORAEDG, SpaceAGORA; @assert SpaceAGORA.EDGServices.available()'
+          julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl core-first
+          julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl edg-first
       - name: Installation leaves the companion unchanged
         run: git diff --exit-code
+  core-release-pin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: "1.12"
+      - name: The core pin is a SpaceAGORA release
+        run: julia --startup-file=no test/core_release_pin.jl
