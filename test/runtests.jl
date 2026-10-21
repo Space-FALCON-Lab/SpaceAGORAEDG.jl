@@ -89,4 +89,5 @@ end
     @test only(rerun.configuration.control_model.control_effectors).state !== actual
 end
 
+include("service_boundary.jl")
 include("compatibility_tests.jl")

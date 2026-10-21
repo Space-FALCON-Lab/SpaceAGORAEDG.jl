@@ -22,7 +22,9 @@ using SpaceAGORA
 
 Core loads without this companion for non-EDG missions. Selecting EDG without
 loading the provider raises `EDGUnavailableError` before output creation or
-stepping. It does not substitute a different guidance law. If a contract check
+stepping. `test/load_order.jl` checks both load orders and this refusal in fresh
+processes, and `test/service_boundary.jl` checks that the package uses only names
+the `EDGServices` contract lists. It does not substitute a different guidance law. If a contract check
 fails, install the identified pair and start a fresh Julia process; do not try to
 repair an already partially loaded session by redefining methods.
 
