@@ -59,7 +59,7 @@ end
     @test ES.CONTRACT_VERSION == SpaceAGORAEDG.REQUIRED_CONTRACT_VERSION
     @test SpaceAGORAEDG.AerobrakingEnergyDepletionConfig === SpaceAGORA.AerobrakingEnergyDepletionConfig
     @test SpaceAGORAEDG.AerobrakingEnergyDepletionState === SpaceAGORA.AerobrakingEnergyDepletionState
-    @test all(name -> isdefined(SpaceAGORAEDG, name), ES.COMPATIBILITY_FUNCTIONS)
+    @test all(name -> isdefined(SpaceAGORAEDG, name), ES.IMPLEMENTED_FUNCTIONS)
     # Initialization can repeat; it checks the contract again and defines nothing.
     counts = () -> map(name -> length(methods(getproperty(ES, name))), ES.IMPLEMENTED_FUNCTIONS)
     before = counts()
