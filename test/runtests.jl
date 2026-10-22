@@ -1,4 +1,4 @@
-using Test, SpaceAGORA, SpaceAGORAEDG, StaticArrays
+using Test, SpaceAGORA, SpaceAGORAEDG, StaticArrays, LinearAlgebra, SpecialFunctions
 const S = SpaceAGORA.EDGServices
 const InternalServices = SpaceAGORA.SimulationModel.EDGServices
 include(joinpath(@__DIR__, "..", "examples", "analytic_atmosphere.jl"))
@@ -92,6 +92,16 @@ end
     @test isequal(rerun.table, example.result.table)
     @test only(rerun.configuration.control_model.control_effectors).state !== actual
 end
+
+# Kernel regression tests, which moved here from SpaceAGORA's test suite.
+include("kernel_fixtures.jl")
+include("e2c_repair_tests.jl")
+include("heat_load_tests.jl")
+include("targeting_tests.jl")
+include("journal_plan_tests.jl")
+include("pass_heat_tests.jl")
+include("diagnostics_tests.jl")
+include("control_composition_tests.jl")
 
 include("service_boundary.jl")
 include("compatibility_tests.jl")
