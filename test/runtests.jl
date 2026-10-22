@@ -3,13 +3,14 @@ const S = SpaceAGORA.EDGServices
 const InternalServices = SpaceAGORA.SimulationModel.EDGServices
 include(joinpath(@__DIR__, "..", "examples", "analytic_atmosphere.jl"))
 
-# This test-only dispatch records the lease that the real core invoker provides.
-# It does not replace any numerical method or run inside a propagated model.
+# This test-only dispatch records the lease that the real core invoker provides
+# on the decision route the core keeps. It does not replace any numerical method
+# or run inside a propagated model.
 mutable struct LeaseRecorder
     context::Any
     fail::Bool
 end
-function SpaceAGORAEDG._edg_constraint_status(recorder::LeaseRecorder, p::S.AbstractPredictionContext)
+function SpaceAGORAEDG.guidance_decision!(recorder::LeaseRecorder, p::S.AbstractPredictionContext)
     recorder.context = p
     constants = S.planet_constants(p)
     recorder.fail && error("test provider failure")
@@ -29,7 +30,7 @@ end
     @test SpaceAGORAEDG.AerobrakingEnergyDepletionState === AerobrakingEnergyDepletionState
     @test SpaceAGORAEDG.AerobrakingControlCommand === S.AerobrakingControlCommand
     @test SpaceAGORAEDG.EDGControlDecision === S.EDGControlDecision
-    @test all(name -> isdefined(SpaceAGORAEDG, name), S.COMPATIBILITY_FUNCTIONS)
+    @test all(name -> isdefined(SpaceAGORAEDG, name), S.IMPLEMENTED_FUNCTIONS)
     # Since contract 2.0.0: the EDG run state first in both decision services.
     State, Config, Context = AerobrakingEnergyDepletionState, AerobrakingEnergyDepletionConfig, S.AbstractPredictionContext
     @test hasmethod(SpaceAGORAEDG.guidance_decision!, Tuple{State, Config, Any, Context, Float64, Int})
@@ -44,7 +45,7 @@ end
     configuration = build_analytic_edg()
     p = SpaceAGORA.SimulationModel.ODEParams(n_sats=1, args=configuration)
     recorder = LeaseRecorder(nothing, false)
-    constants = InternalServices._invoke_kernel(:_edg_constraint_status, recorder, p)
+    constants = S.guidance_decision!(recorder, p)
     @test constants.μ == configuration.environment_model.planet.μ
     context = recorder.context
     @test isempty(propertynames(context))
@@ -53,7 +54,7 @@ end
     @test_throws ArgumentError S.planet_constants(context)
     @test_throws ArgumentError getfield(context, :query)(Val(:planet))
     recorder.fail = true
-    @test_throws ErrorException InternalServices._invoke_kernel(:_edg_constraint_status, recorder, p)
+    @test_throws ErrorException S.guidance_decision!(recorder, p)
     @test_throws ArgumentError S.planet_constants(recorder.context)
     @test_throws MethodError S.planet_constants(p)
     @test_throws MethodError S._edg_ephemeris_time(p, 0.0)
