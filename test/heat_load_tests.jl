@@ -212,7 +212,8 @@ end
     update_control!(ctx.control, ctx.u, ctx.p, 40.0, 1)
     ctx.u.sc[1].pos .= original_position
     update_control!(ctx.control, ctx.u, ctx.p, 41.0, 1)
-    @assert ctx.state.selected_mode[1] == :max_energy_depletion
+    # The checks below read the max-energy-depletion branch of the window.
+    @test ctx.state.selected_mode[1] == :max_energy_depletion
 
     for switches in ((30.0,30.0), (Inf,Inf), (NaN,NaN), (40.0,30.0))
         ctx.state.heat_load_switches_s[1] = switches
