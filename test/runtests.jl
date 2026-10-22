@@ -17,17 +17,20 @@ function SpaceAGORAEDG._edg_constraint_status(recorder::LeaseRecorder, p::S.Abst
 end
 
 @testset "EDG package service contract" begin
-    @test S.CONTRACT_VERSION == SpaceAGORAEDG.REQUIRED_CONTRACT_VERSION == v"2.0.0"
-    @test isnothing(SpaceAGORAEDG.require_version(v"2.0.0"))
-    # The previous contract, whose decision services took the configuration first.
+    @test S.CONTRACT_VERSION == SpaceAGORAEDG.REQUIRED_CONTRACT_VERSION == v"3.0.0"
+    @test isnothing(SpaceAGORAEDG.require_version(v"3.0.0"))
+    # The previous contract, which also listed two queries this package did not call.
+    @test_throws S.CompatibilityError SpaceAGORAEDG.require_version(v"2.0.0")
+    # The contract before it, whose decision services took the configuration first.
     @test_throws S.CompatibilityError SpaceAGORAEDG.require_version(v"1.0.0")
+    @test !isdefined(S, :_edg_planet_frame_lpi) && !isdefined(S, :_edg_sample_prediction_atmosphere)
     @test S.available()
     @test SpaceAGORAEDG.AerobrakingEnergyDepletionConfig === AerobrakingEnergyDepletionConfig
     @test SpaceAGORAEDG.AerobrakingEnergyDepletionState === AerobrakingEnergyDepletionState
     @test SpaceAGORAEDG.AerobrakingControlCommand === S.AerobrakingControlCommand
     @test SpaceAGORAEDG.EDGControlDecision === S.EDGControlDecision
     @test all(name -> isdefined(SpaceAGORAEDG, name), S.COMPATIBILITY_FUNCTIONS)
-    # Contract 2.0.0: the EDG run state first in both decision services.
+    # Since contract 2.0.0: the EDG run state first in both decision services.
     State, Config, Context = AerobrakingEnergyDepletionState, AerobrakingEnergyDepletionConfig, S.AbstractPredictionContext
     @test hasmethod(SpaceAGORAEDG.guidance_decision!, Tuple{State, Config, Any, Context, Float64, Int})
     @test !hasmethod(SpaceAGORAEDG.guidance_decision!, Tuple{Config, State, Any, Context, Float64, Int})
