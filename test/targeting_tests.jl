@@ -288,7 +288,13 @@ end
 # Three SpaceAGORA integration tests (the journal live replanning, the assembled
 # replan callbacks and the AlgorithmGuidance replanning) start from targets these
 # kernels give. SpaceAGORA records the values; this checks the kernels still give
-# them, bit for bit. Recorded on SpaceAGORA v0.6.0 through its own kernel calls.
+# them. Recorded on SpaceAGORA v0.6.0 through its own kernel calls, on macOS.
+# The comparison allows a relative 1e-12, not bit equality: the same code gives
+# the apoapsis radius a few units in the last place apart on another platform
+# (9.750451931596266e6 against 9.750451931596259e6 on Linux), while a kernel
+# change that matters moves these values by far more (1e-12 of the apoapsis
+# radius is about 10 micrometres).
+const RECORDED_RTOL = 1e-12
 const RECORDED_TARGETS = (
     # Control clock period 1 s: the journal's live replanning, which also starts
     # from the predicted energy and the predicted state 2 s into the passage.
@@ -318,12 +324,12 @@ const RECORDED_TARGETS = (
         coast=K._edg_vacuum_apoapsis_correction(c.p,known.exit_position,known.exit_velocity,
             461.0,known.duration_s)
         @test coast.event_reached
-        @test norm(coast.position) === recorded.target
+        @test isapprox(norm(coast.position), recorded.target; rtol=RECORDED_RTOL)
         recorded.energy === nothing && continue
-        @test known.energy_jkg === recorded.energy
+        @test isapprox(known.energy_jkg, recorded.energy; rtol=RECORDED_RTOL)
         idx=findfirst(==(2.0),known.track.time)
         @test idx!==nothing
-        @test known.track.positions[idx] == recorded.pos2
-        @test known.track.velocities[idx] == recorded.vel2
+        @test isapprox(known.track.positions[idx], recorded.pos2; rtol=RECORDED_RTOL)
+        @test isapprox(known.track.velocities[idx], recorded.vel2; rtol=RECORDED_RTOL)
     end
 end
