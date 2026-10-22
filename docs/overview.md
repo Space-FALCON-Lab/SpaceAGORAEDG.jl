@@ -97,7 +97,7 @@ An unreachable target, an invalid sampled candidate family, an empty structural
 admissible set and a measured constraint violation are different outcomes and
 should remain distinguishable in the report.
 
-Continue with [Extending a study](extension_guide.md) to run the complete
+Continue with [Extending a study](extension_guide.md) to run the short
 analytic-atmosphere example, inspect its diagnostics and change one study
 assumption at a time. The [scientific-status guide](scientific_status.md) explains
 which conclusions the retained examples support.
