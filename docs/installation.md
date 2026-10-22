@@ -93,4 +93,9 @@ Maintainers complete publication in this order:
 4. Merge and release only after the final pair passes. Preserve the exact source,
    asset and validation records used to make that decision.
 
+The `core-release-pin` check passes only when the core commit in
+`CoreSource.toml` is a SpaceAGORA release. While step 2 pins a facade commit that
+is not yet released, that check fails: the companion is not ready for release
+until its pin moves to the core release.
+
 No guessed, floating or unpublished revision serves as a release pin.
