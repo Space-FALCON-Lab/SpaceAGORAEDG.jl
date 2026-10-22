@@ -2,8 +2,8 @@
 
 SpaceAGORAEDG supplies experimental energy-depletion guidance for SpaceAGORA.
 Use Julia 1.12 and the exact core and companion pair recorded for the release.
-The package version constraint, SpaceAGORA 0.4 or 0.5, is only the first
-compatibility check: this implementation also requires EDGServices contract 2.0.0.
+The package version constraint, the SpaceAGORA 0.6 family, is only the first
+compatibility check: this implementation also requires EDGServices contract 3.0.0.
 Version 0.1.0 of this package implements contract 1.0.0 with its own pinned core.
 
 ## From a SpaceAGORA checkout
