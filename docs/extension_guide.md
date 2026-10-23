@@ -109,8 +109,11 @@ julia --startup-file=no test/installation_tests.jl
 julia --startup-file=no --project=/path/to/edg-env -e 'using Pkg; Pkg.test("SpaceAGORAEDG")'
 ```
 
-The [CI workflow](../.github/workflows/ci.yml) installs the recorded public pair,
-runs these checks and exercises both package load orders. The core repository
+The required installer job in the [CI workflow](../.github/workflows/ci.yml)
+installs the recorded public pair with a fresh dependency resolution, runs the
+full suite and incompatible-core refusal, and exercises both package load
+orders. A separate shared contributor job repeats the suite and load-order
+contracts in an environment seeded from the core manifest. The core repository
 also runs its existing EDG numerical, lifecycle, native and coverage suites with
 the selected provider. Passing the companion suite alone does not replace those
 checks or the native scientific comparisons.
