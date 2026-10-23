@@ -99,3 +99,25 @@ is not yet released, that check fails: the companion is not ready for release
 until its pin moves to the core release.
 
 No guessed, floating or unpublished revision serves as a release pin.
+
+## Continuous integration
+
+The pinned SpaceAGORA contributor workflow runs strict precompilation, the full
+EDG test suite with deprecations treated as errors, incompatible-core refusal,
+and both package load orders in an isolated environment. It also checks that
+tracked inputs remain unchanged and publishes conformance reports. The full
+suite runs directly from `test/runtests.jl` with the core-seeded dependencies;
+the shared workflow does not force `Pkg.test`'s bounds-checking mode.
+
+EDG keeps its own installer preflight, a standalone installation smoke test and
+the released-core pin check. These exercise the public installation route in
+addition to the shared workflow's environment builder.
+
+`SpaceAGORASource.toml` records the shared workflow's core; `CoreSource.toml`
+records the standalone installer's core. Their URL, UUID and revision must agree,
+and CI checks this. When updating the pair, update both files and the workflow's
+`uses` SHA and `spaceagora-rev` together. This migration retains the existing
+SpaceAGORA 0.6.0 pin; it does not repin the installed pair.
+
+The shared workflow calls `test/load_order.jl companion-first`; `edg-first`
+remains an alias for local use.

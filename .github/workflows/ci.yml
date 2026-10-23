@@ -9,6 +9,16 @@ concurrency:
   group: edg-ci-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
+  contributor-contract:
+    uses: Space-FALCON-Lab/SpaceAGORA.jl/.github/workflows/contributor-ci.yml@0487e8226107592b19221618f0f21f500cf2aacf
+    with:
+      spaceagora-rev: 0487e8226107592b19221618f0f21f500cf2aacf
+      kind: companion
+      julia-version: "1.12"
+      manifest: core
+      depwarn: error
+      threads: "2"
+      load-orders: true
   installation-and-contract:
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -28,12 +38,10 @@ jobs:
         run: julia --startup-file=no test/installation_tests.jl
       - name: Independent installation of the published pair
         run: julia --startup-file=no scripts/setup_env.jl "$RUNNER_TEMP/edg-environment"
-      - name: Companion tests
-        run: julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" -e 'using Pkg; Pkg.test("SpaceAGORAEDG")'
-      - name: Both package load orders, and the refusal without the package
-        run: |
-          julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl core-first
-          julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl edg-first
+      # Keep the public installer exercised independently of the shared CI setup.
+      # Full package tests and both load orders run in contributor-contract above.
+      - name: Standalone installed pair smoke
+        run: julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl core-first
       - name: Installation leaves the companion unchanged
         run: git diff --exit-code
   core-release-pin:

@@ -37,3 +37,12 @@ include(joinpath(@__DIR__, "..", "scripts", "setup_env.jl"))
         @test Base.active_project() == active
     end
 end
+
+@testset "Standalone and reusable CI pin the same core" begin
+    root = joinpath(@__DIR__, "..")
+    installer = TOML.parsefile(joinpath(root, "CoreSource.toml"))
+    contributor = TOML.parsefile(joinpath(root, "SpaceAGORASource.toml"))
+    for key in ("url", "uuid", "rev")
+        @test contributor[key] == installer[key]
+    end
+end
