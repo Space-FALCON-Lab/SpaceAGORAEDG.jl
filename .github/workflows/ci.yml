@@ -38,10 +38,16 @@ jobs:
         run: julia --startup-file=no test/installation_tests.jl
       - name: Independent installation of the published pair
         run: julia --startup-file=no scripts/setup_env.jl "$RUNNER_TEMP/edg-environment"
-      # Keep the public installer exercised independently of the shared CI setup.
-      # Full package tests and both load orders run in contributor-contract above.
-      - name: Standalone installed pair smoke
+      # This required job also qualifies the installer's fresh dependency resolution.
+      # The shared job independently checks the environment seeded from core's manifest.
+      - name: Full suite in the independently installed environment
+        run: julia --startup-file=no --check-bounds=yes --project="$RUNNER_TEMP/edg-environment" -e 'using Pkg; Pkg.test("SpaceAGORAEDG")'
+      - name: Reject an incompatible core before numerical loading
+        run: julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/incompatible_core.jl
+      - name: Core-first installed pair smoke
         run: julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl core-first
+      - name: Companion-first installed pair smoke
+        run: julia --startup-file=no --project="$RUNNER_TEMP/edg-environment" test/load_order.jl edg-first
       - name: Installation leaves the companion unchanged
         run: git diff --exit-code
   core-release-pin:
