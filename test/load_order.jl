@@ -1,10 +1,12 @@
 # One package load order in a fresh process:
-#   julia --project=<environment> test/load_order.jl core-first|edg-first
+#   julia --project=<environment> test/load_order.jl core-first|companion-first|edg-first
 # Core-first also checks that SpaceAGORA, before this package loads, refuses an EDG
 # run without changing its state. Both orders then check the same service contract.
 using Test, Serialization
-length(ARGS) == 1 && only(ARGS) in ("core-first", "edg-first") || error("Pass core-first or edg-first")
-const ORDER = only(ARGS)
+length(ARGS) == 1 && only(ARGS) in ("core-first", "companion-first", "edg-first") ||
+    error("Pass core-first, companion-first or edg-first")
+# The shared workflow uses companion-first; retain the public EDG-specific alias.
+const ORDER = only(ARGS) == "companion-first" ? "edg-first" : only(ARGS)
 
 if ORDER == "core-first"
     using SpaceAGORA
