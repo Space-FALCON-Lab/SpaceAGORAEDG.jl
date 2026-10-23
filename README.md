@@ -24,8 +24,9 @@ constraint satisfaction or exact reproduction of the journal results. Read
    identified core and companion pair. Julia 1.12 is required.
 2. Read [How EDG works](docs/overview.md) to understand configuration, ownership,
    units and the meaning of the saved diagnostics.
-3. Run the [analytic-atmosphere example](examples/analytic_atmosphere.jl) and consult
-   the [compatibility guide](docs/compatibility.md) when integrating it into a mission.
+3. Follow [Run and inspect the short example](docs/extension_guide.md#run-and-inspect-the-short-example)
+   for the launch command and result inspection, then consult the
+   [compatibility guide](docs/compatibility.md) when integrating it into a mission.
 4. Use [Extending a study](docs/extension_guide.md) to change a case while preserving
    a comparison you can interpret.
 

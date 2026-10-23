@@ -6,6 +6,12 @@ not a certificate for a new spacecraft, atmosphere or targeting case. The
 the questions that remain open. A release also requires the final published
 pair to pass hosted checks and receive merge approval.
 
+The source identities and counts below are retained validation records. They
+describe the runs named in each section, rather than a fresh qualification of
+every later commit. Use [Installation](installation.md) for the current setup
+route and [Extending a study](extension_guide.md) for the maintained local checks.
+The native reference recipe remains tied to its documented v0.1.0 source pair.
+
 ## Source identity
 
 The native comparisons executed the frozen runtime source published in core
