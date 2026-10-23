@@ -111,6 +111,14 @@ both load orders, CLI environment selection and installation safeguards. The
 core PR contract suite passed all 31 gates and 49 negative controls before the
 final preset-catalog integration; the changed preset tests then passed separately.
 
+The kernel regression tests are this package's own. They came from SpaceAGORA's
+EDG tests when SpaceAGORA stopped forwarding the kernels' helpers and kept only
+its two decisions (SpaceAGORA 0.6.1). They reach each kernel through SpaceAGORA's
+decision route, so SpaceAGORA projects the arguments and expires the prediction
+lease as in a run (`test/kernel_fixtures.jl`). SpaceAGORA keeps the tests of what
+it owns: projection and leases, panel application, heat accounting, callbacks and
+the run lifecycle.
+
 The [companion workflow](../.github/workflows/ci.yml) tests installation of its
 public immutable pair, its package tests and both load orders. SpaceAGORA adds
 mandatory EDG installation to its native, coverage, examples and other required

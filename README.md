@@ -64,7 +64,9 @@ Version 0.2.0 implements `EDGServices` contract 2.0.0, whose decision services t
 the run's EDG state before the configuration. Version 0.3.0 keeps that contract and
 requires SpaceAGORA 0.3 or 0.4; version 0.4.0 keeps it too and requires SpaceAGORA
 0.4 or 0.5. Version 0.5.0 implements contract 3.0.0, which removes two queries this
-package did not call, and requires SpaceAGORA 0.6. The published v0.1.0 release
+package did not call, and requires SpaceAGORA 0.6. Version 0.5.1 keeps that contract
+and its code, and carries the kernel regression tests that SpaceAGORA 0.6.1 no
+longer runs itself. The published v0.1.0 release
 implements contract 1.0.0 with its own pinned core.
 
 ## Publications and license
