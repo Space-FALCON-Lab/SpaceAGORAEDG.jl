@@ -2,7 +2,7 @@
 
 SpaceAGORAEDG supplies experimental energy-depletion guidance for SpaceAGORA.
 Use Julia 1.12 and the exact core and companion pair recorded for the release.
-The package version constraint, the SpaceAGORA 0.6 family, is only the first
+The package version constraint, the SpaceAGORA 0.6 and 0.7 families, is only the first
 compatibility check: this implementation also requires EDGServices contract 3.0.0.
 Version 0.1.0 of this package implements contract 1.0.0 with its own pinned core.
 
@@ -116,8 +116,8 @@ addition to the shared workflow's environment builder.
 `SpaceAGORASource.toml` records the shared workflow's core; `CoreSource.toml`
 records the standalone installer's core. Their URL, UUID and revision must agree,
 and CI checks this. When updating the pair, update both files and the workflow's
-`uses` SHA and `spaceagora-rev` together. This migration retains the existing
-SpaceAGORA 0.6.0 pin; it does not repin the installed pair.
+`uses` SHA and `spaceagora-rev` together. The current checkout pins the published
+SpaceAGORA v0.7.0 commit for both routes, retaining EDGServices contract 3.0.0.
 
 The shared workflow calls `test/load_order.jl companion-first`; `edg-first`
 remains an alias for local use.

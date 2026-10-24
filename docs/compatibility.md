@@ -2,7 +2,7 @@
 
 Use the exact core and companion revisions recorded for the release. The
 current checkout admits Julia 1.12, the SpaceAGORA 0.6 and 0.7 families and
-**EDGServices contract 3.0.0**. Its default core pin remains v0.6.0. The 0.7
+**EDGServices contract 3.0.0**. Its default core pin is v0.7.0. The 0.7
 compatibility metadata belongs to this source revision; the existing v0.5.1
 companion tag does not contain that change.
 The broad package version constraint alone does not identify a qualified source
