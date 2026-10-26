@@ -22,46 +22,46 @@ The public `AerobrakingEnergyDepletionConfig`,
 `AerobrakingEnergyDepletionState`,
 `AerobrakingEnergyDepletionGuidanceModel` and
 `AerobrakingEnergyDepletionControlModel` types still belong to SpaceAGORA.
-Construct guidance and control with the same configuration and the **same state
-object**. Two independently constructed, initially equal state objects do not
-share subsequent decisions. The state has one entry per spacecraft.
+Construct guidance and control with the same configuration and the same state
+object. Two state objects built separately do not share later decisions, even if
+they start equal. The state has one entry per spacecraft.
 
-`controlled_panel_links` identifies links inside each spacecraft. Selected links
-must be rotatable non-root links supported by the core panel controller. A panel
-on a moving articulated body is outside the supported kinematic EDG route; this
-package does not supply a joint motor, actuator rate limit or attitude controller.
+`controlled_panel_links` names links inside each spacecraft. They must be
+rotatable non-root links that the core panel controller supports. A panel on a
+moving articulated body is not supported: this package supplies no joint motor,
+actuator rate limit or attitude controller.
 
-Set guidance and control periods to `1 / 3` seconds for the qualified 3 Hz
-comparison. In SpaceAGORA, `guidance_rates` and `control_rates` hold periods in
-seconds despite their names. Commands remain held between updates. Faster
-updates, added safety margins or relaxed limits define a different experiment.
+Set the guidance and control periods to `1 / 3` seconds to match the 3 Hz
+comparisons. Despite their names, SpaceAGORA's `guidance_rates` and
+`control_rates` hold periods in seconds. Commands are held between updates.
+Faster updates, added safety margins or relaxed limits make a different
+experiment.
 
-The physical limits default to `Inf`. Selecting a restriction with an infinite
-threshold does not establish finite protection. Use the documented case's
-limits for a reproduction, or explicitly state and justify new limits for a
-new study.
+The physical limits default to `Inf`, and a restriction with an infinite
+threshold protects nothing. Use the documented case's limits to reproduce it, or
+state and justify new limits for a new study.
 
 ## Follow the ownership boundary
 
-SpaceAGORA prepares a copied observation of the relevant physical state and
-provides call-scoped access to its atmosphere, gravity, frame and control-clock
-services. SpaceAGORAEDG computes guidance and control decisions. Core then
-applies the command to the selected panels and propagates the physical state.
-An extension never receives the mutable engine parameter object as a supported
-public argument.
+SpaceAGORA prepares a copy of the relevant physical state and gives each call
+temporary access to its atmosphere, gravity, frame and control-clock services.
+SpaceAGORAEDG computes the guidance and control decisions. SpaceAGORA then applies
+the command to the selected panels and propagates the physical state. The
+companion never receives the engine's mutable parameter object as a supported
+argument.
 
 During a run, guidance owns the targeting plan and its replanning clock. When
-guidance and control are due together, guidance runs first and control consumes
-the plan. Control does not independently advance the targeting replan clock.
-Passage transitions invalidate only the affected spacecraft's cached plan.
-Physical heat integrals continue accumulating.
+guidance and control are due at the same time, guidance runs first and control
+uses the plan; control never advances the replanning clock itself. A passage
+transition invalidates only the affected spacecraft's cached plan, and the
+physical heat integrals keep accumulating.
 
-A normal `run_simulation` starts a fresh EDG runtime. Default configuration
-isolation preserves the shared guidance/control state inside the run while
-separating it from the caller's original configuration. Read completed
-diagnostics from `result.configuration` when using
-`run_simulation(args; return_results=true)`. The caller's original state is not
-the completed isolated run. EDG checkpoint writing and resume remain unsupported.
+A normal `run_simulation` starts a fresh EDG runtime. By default the run works
+on an isolated copy of the configuration: guidance and control still share one
+state inside the run, but your original configuration is left as it was. With
+`run_simulation(args; return_results=true)`, read the final diagnostics from
+`result.configuration`, not from your original state object. Writing checkpoints
+and resuming are not supported with EDG.
 
 ## Read units and diagnostics carefully
 
@@ -83,19 +83,19 @@ current heat can mix two different panels and give the wrong quantity.
 `last_pass_heat_load_j_cm2` is the passage quantity used by planning.
 
 The controller's internal heat-rate estimate and the propagated thermal model
-are distinct calculations. Assess heating with the saved thermal quantities on
+are separate calculations. Assess heating with the saved thermal quantities on
 the controlled panels as well as the guidance diagnostics. A whole-spacecraft
-maximum may include the bus; label the panel set and aggregation used.
+maximum may include the bus, so say which panels and which aggregation you used.
 
 Save applied angle, mode, switch diagnostics, heat rates and heat loads together
 with time, position, velocity and density. Re-evaluating an earlier state with
 the panels' final orientation does not reconstruct the forces and heat that
 were applied during propagation.
 
-A low-drag fallback describes a command policy. It is not proof of feasibility.
-An unreachable target, an invalid sampled candidate family, an empty structural
-admissible set and a measured constraint violation are different outcomes and
-should remain distinguishable in the report.
+A low-drag fallback is a command policy, not proof of feasibility. An unreachable
+target, an invalid sampled candidate family, an empty structurally admissible set
+and a measured constraint violation are different outcomes; keep them apart in a
+report.
 
 Continue with [Extending a study](extension_guide.md) to run the short
 analytic-atmosphere example, inspect its diagnostics and change one study

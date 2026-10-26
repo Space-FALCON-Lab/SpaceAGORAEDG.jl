@@ -1,9 +1,9 @@
 # Extending a study
 
-Start with a case that runs unchanged in the installed environment. Keep its
-configuration and output as a reference before changing the vehicle,
-atmosphere or guidance settings. This gives a failed comparison an identifiable
-cause and keeps a packaging problem separate from a scientific result.
+Start with a case that runs unchanged in the installed environment, and keep its
+configuration and output as a reference before changing the vehicle, atmosphere
+or guidance settings. Then a failed comparison has a cause you can find, and a
+packaging problem stays separate from a scientific result.
 
 ## Run and inspect the short example
 
@@ -13,18 +13,20 @@ After [installation](installation.md), run from the companion checkout:
 julia --startup-file=no --project=/path/to/edg-env examples/analytic_atmosphere.jl
 ```
 
-The example propagates a three-body spacecraft for two seconds using an analytic
+The example propagates a three-body spacecraft for two seconds in an analytic
 Earth atmosphere. Its guidance and control share one EDG state and update every
 1/3 second. It prints the applied angle, the controller's heat-rate estimate and
-dynamic pressure. It is an installation and ownership exercise, not a native-GRAM
-case, targeting benchmark or journal reproduction.
+the dynamic pressure. It checks the installation and the ownership boundary; it
+is not a native-GRAM case, a targeting benchmark or a reproduction of the journal
+results.
 
-To inspect the result in Julia, include the example and call its runner:
+To inspect the result, start Julia in the companion checkout with
+`--project=/path/to/edg-env`, include the example and call its runner:
 
 ```julia
 include("examples/analytic_atmosphere.jl")
-run = run_analytic_edg()
-result = run.result
+example = run_analytic_edg()
+result = example.result
 state = only(result.configuration.control_model.control_effectors).state
 
 state.last_alpha_rad[1]
@@ -34,48 +36,48 @@ result.table
 ```
 
 The runner returns both the original configuration and the completed result.
-Read the state from `result.configuration`: the default run isolates mutable
-state from the original input while preserving the shared guidance/control
-relationship inside the run. The heat-rate estimate printed by this example
-is not an independent measurement of every propagated panel's thermal load.
+Read the state from `result.configuration`: by default the run works on an
+isolated copy, in which guidance and control still share one state, and leaves the
+original input unchanged. The heat-rate estimate the example prints is the
+controller's estimate, not a measurement of each propagated panel's thermal load.
 
-This example keeps its output in memory: `results=false` disables result files,
-and `generate_plots=false` disables plots. Inspect `result.table.time` to see the
-saved elapsed times in seconds. The short run saves its start and requested end;
-two rows do not describe every solver step or controller update. A normal return
-and a final saved time of 2 seconds establish completion of this small example,
-not completion of an atmospheric passage.
+The example keeps its output in memory: `results=false` turns off result files
+and `generate_plots=false` turns off plots. `result.table.time` holds the saved
+elapsed times in seconds. This short run saves only its start and its requested
+end, so the two rows do not show every solver step or controller update. A normal
+return with a final saved time of 2 seconds means this small example completed,
+not that an atmospheric passage did.
 
-The `sc1_pos_*` and `sc1_vel_*` columns contain inertial position in metres and
-velocity in metres per second. The configured epoch is 1 January 2024. The
-`sc1_heat_rate` and `sc1_heat_load` columns are propagated whole-spacecraft
-thermal summaries and may include the bus; they are not the printed EDG
-controller estimate or an isolated history of the controlled panels. See the
-core [output-column guide](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/bec28fcc348b48c6e807d007f9a5009e253e8340/docs/src/user/outputs.md#column-reference)
-for units and aggregation. Keep the configuration and exact package revisions
-with any saved table; the table alone does not identify the model or source.
+The `sc1_pos_*` and `sc1_vel_*` columns hold the inertial position in metres and
+velocity in metres per second; the configured epoch is 1 January 2024. The
+`sc1_heat_rate` and `sc1_heat_load` columns are propagated thermal summaries for
+the whole spacecraft and may include the bus. They are neither the controller
+estimate the example prints nor a history of the controlled panels alone. See
+SpaceAGORA's [output-column reference](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/bec28fcc348b48c6e807d007f9a5009e253e8340/docs/src/user/output_columns.md)
+for units and aggregation. Keep the configuration and the exact package revisions
+with any saved table; the table alone does not identify the model or the source.
 
 ## Make one bounded change
 
-The example exposes `duration_s` so the installation walkthrough can be extended
-without changing the model, limits or cadence:
+The example takes a `duration_s` keyword, so you can run it longer without
+changing the model, the limits or the cadence:
 
 ```julia
-run = run_analytic_edg(; duration_s=3.0)
-@assert only(run.result.configuration.control_model.control_effectors).state ===
-        only(run.result.configuration.guidance_model.guidance_effectors).state
+example = run_analytic_edg(; duration_s=3.0)
+@assert only(example.result.configuration.control_model.control_effectors).state ===
+        only(example.result.configuration.guidance_model.guidance_effectors).state
 ```
 
-This exercises a longer execution of the same short case. It does not increase
-the case's scientific qualification. For a new study, copy the example into your
-own project and give it a distinct name. State what you changed and why. Preserve
-3 Hz and the original limits when reproducing the accepted comparisons.
+This runs the same short case for longer; it does not make the case
+scientifically stronger. For a new study, copy the example into your own project,
+give it its own name, and record what you changed and why. Keep 3 Hz and the
+original limits when reproducing the published comparisons.
 
 Before claiming thermal or structural feasibility, save the relevant propagated
-panel quantities over the passage, including between command updates. Label
-units, the selected panels, the aggregation and the difference between a
-predicted and an executed result. A finite angle or a successful solver return
-is not a feasibility test.
+panel quantities over the whole passage, including between command updates.
+Label the units, the selected panels and the aggregation, and keep predicted and
+executed results apart. A finite angle or a successful solver return is not a
+feasibility test.
 
 ## Add models through core interfaces
 
@@ -84,46 +86,51 @@ model interfaces. See [Add a density model](https://github.com/Space-FALCON-Lab/
 and the [density-model template](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/bec28fcc348b48c6e807d007f9a5009e253e8340/templates/density_model_template.jl)
 for the public `SpaceAGORA.AbstractDensityModel` and `SpaceAGORA.getDensity`
 interface, or the [custom-force walkthrough](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/blob/bec28fcc348b48c6e807d007f9a5009e253e8340/docs/src/user/custom_effector.md)
-for a force/torque component. These interface references are pinned to the
-supported core revision recorded in `CoreSource.toml`. Supply models through
-`SimulationConfiguration`; the EDG
-prediction services then use the configured core queries. Do not reach into
-`ODEParams`, replace private core methods or retain a borrowed prediction handle.
-Core owns physical propagation and panel actuation.
+for a force or torque component. These links point at the core revision recorded
+in `CoreSource.toml` (SpaceAGORA v0.7.0). Supply models through
+`SimulationConfiguration`; the EDG prediction services then use the configured
+core queries. Do not reach into `ODEParams`, replace private core methods or keep
+a borrowed prediction handle. The core owns physical propagation and panel
+actuation.
 
-A change to the EDG algorithm itself belongs in this companion and requires
-review of its versioned service inventory, numerical parity and lifecycle
-behavior. Run the companion suite, both package load orders, the existing core
-EDG regressions and the relevant native comparisons. Retain a failing example
-as evidence rather than changing scientific thresholds merely to make it pass.
-The [compatibility guide](compatibility.md) defines the supported boundary;
-[Scientific status](scientific_status.md) describes what those checks can and
-cannot establish.
+A change to the EDG algorithm itself belongs in this companion, and needs a
+review of the service interface it uses, of numerical agreement with the previous
+version and of the run lifecycle. Run the companion suite, both load orders, the
+core's EDG regressions and the relevant native comparisons. Keep a failing
+example as evidence; do not change scientific thresholds just to make it pass.
+The [compatibility guide](compatibility.md) defines the supported boundary, and
+[Scientific status](scientific_status.md) describes what these checks can and
+cannot show.
 
 ## Run the companion checks
 
-From the companion checkout with the installed paired environment:
+From the companion checkout, with the installed environment:
 
 ```sh
 julia --startup-file=no test/installation_tests.jl
 julia --startup-file=no --project=/path/to/edg-env -e 'using Pkg; Pkg.test("SpaceAGORAEDG")'
+julia --startup-file=no --project=/path/to/edg-env test/incompatible_core.jl
+julia --startup-file=no --project=/path/to/edg-env test/load_order.jl core-first
+julia --startup-file=no --project=/path/to/edg-env test/load_order.jl edg-first
 ```
 
-The required installer job in the [CI workflow](../.github/workflows/ci.yml)
-installs the recorded public pair with a fresh dependency resolution, runs the
-full suite and incompatible-core refusal, and exercises both package load
-orders. A separate shared contributor job repeats the suite and load-order
-contracts in an environment seeded from the core manifest. The core repository
+These are the checks of the required `installation-and-contract` job in the
+[CI workflow](../.github/workflows/ci.yml), which installs the core recorded in
+`CoreSource.toml` with the checkout under test, resolving dependencies afresh.
+The separate `contributor-contract` job repeats the suite and the load-order
+checks in an environment seeded from the core's manifest (see
+[Installation](installation.md#continuous-integration)). The core repository
 also runs its existing EDG numerical, lifecycle, native and coverage suites with
 the selected provider. Passing the companion suite alone does not replace those
 checks or the native scientific comparisons.
 
 ## Prediction result assembly
 
-The targeting and maximum-energy prediction strategies share
-`_edg_prediction_track` for converting already-integrated samples into returned
-trajectory fields. Integration, alpha selection and guidance/control-clock
-updates remain in each strategy. The helper preserves sample order and derives
-altitude, atmospheric state, speed and flight-path angle using the same service
-queries. Targeting tests exercise both strategies with off-clock initial and final
-samples, including their distinct interior alpha choices.
+The targeting and maximum-energy prediction strategies both use the private
+helper `_edg_prediction_track` to turn their integrated samples into the returned
+trajectory fields. Each strategy still does its own integration, panel-angle
+selection and clock handling; the helper keeps the samples in order and derives
+the altitude, atmospheric state, speed and flight-path angle with the same
+service queries for both. `test/targeting_tests.jl` checks both strategies with
+first and last samples that fall between control ticks, including the different
+panel angles each chooses in between.
