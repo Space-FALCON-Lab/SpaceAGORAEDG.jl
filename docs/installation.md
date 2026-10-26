@@ -121,3 +121,13 @@ SpaceAGORA v0.7.0 commit for both routes, retaining EDGServices contract 3.0.0.
 
 The shared workflow calls `test/load_order.jl companion-first`; `edg-first`
 remains an alias for local use.
+
+
+### Updating shared support
+
+`SharedSupport.toml` pins the core source of this repository's generated support
+files. Their headers identify the canonical file and its SHA-256. Change the
+canonical owner in core and run `scripts/sync_companion_support.jl --write` there
+against this checkout, then update the support pin. The Shared companion support
+CI check compares the copies with that immutable source. This support pin is
+separate from the core revision used to run the companion's numerical tests.
