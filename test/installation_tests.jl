@@ -46,3 +46,6 @@ end
         @test contributor[key] == installer[key]
     end
 end
+
+include("support/installation_contract.jl")
+CompanionInstallationContract.test_installation_contract(EDGInstallation)
