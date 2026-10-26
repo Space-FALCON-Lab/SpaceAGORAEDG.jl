@@ -334,6 +334,40 @@ function _edg_targeting_aero_acceleration(
     return SVector{3, Float64}(env.l_pi' * force_pp) / mass
 end
 
+# Convert propagated samples without changing either guidance switching policy.
+function _edg_prediction_track(p, t, times, positions, velocities, alpha_profile)
+    n = length(times)
+    h = Vector{Float64}(undef, n)
+    gamma = Vector{Float64}(undef, n)
+    speed = Vector{Float64}(undef, n)
+    rho = Vector{Float64}(undef, n)
+    temperature = Vector{Float64}(undef, n)
+    speed_ratio = Vector{Float64}(undef, n)
+    for j in eachindex(times)
+        env = _edg_targeting_prediction_environment(p, positions[j], velocities[j], t + times[j])
+        radius = max(norm(positions[j]), eps(Float64))
+        vel_norm = max(norm(velocities[j]), eps(Float64))
+        h[j] = env.altitude_m
+        gamma[j] = asin(clamp(dot(positions[j], velocities[j]) / max(radius * vel_norm, eps(Float64)), -1.0, 1.0))
+        speed[j] = env.speed
+        rho[j] = env.rho
+        temperature[j] = env.temperature
+        speed_ratio[j] = env.molecular_speed_ratio
+    end
+    return (
+        time=times,
+        h=h,
+        gamma=gamma,
+        speed=speed,
+        rho=rho,
+        temperature=temperature,
+        speed_ratio=speed_ratio,
+        positions=positions,
+        velocities=velocities,
+        alpha_profile=alpha_profile,
+    )
+end
+
 function _edg_integrated_targeting_trajectory(
     config::AerobrakingEnergyDepletionConfig,
     p::AbstractPredictionContext,
@@ -407,35 +441,7 @@ function _edg_integrated_targeting_trajectory(
         alpha_profile[end] = alpha_past
     end
 
-    h = Vector{Float64}(undef, n)
-    gamma = Vector{Float64}(undef, n)
-    speed = Vector{Float64}(undef, n)
-    rho = Vector{Float64}(undef, n)
-    temperature = Vector{Float64}(undef, n)
-    speed_ratio = Vector{Float64}(undef, n)
-    for j in eachindex(times)
-        env = _edg_targeting_prediction_environment(p, positions[j], velocities[j], t + times[j])
-        radius = max(norm(positions[j]), eps(Float64))
-        vel_norm = max(norm(velocities[j]), eps(Float64))
-        h[j] = env.altitude_m
-        gamma[j] = asin(clamp(dot(positions[j], velocities[j]) / max(radius * vel_norm, eps(Float64)), -1.0, 1.0))
-        speed[j] = env.speed
-        rho[j] = env.rho
-        temperature[j] = env.temperature
-        speed_ratio[j] = env.molecular_speed_ratio
-    end
-    return (
-        time=times,
-        h=h,
-        gamma=gamma,
-        speed=speed,
-        rho=rho,
-        temperature=temperature,
-        speed_ratio=speed_ratio,
-        positions=positions,
-        velocities=velocities,
-        alpha_profile=alpha_profile,
-    )
+    return _edg_prediction_track(p, t, times, positions, velocities, alpha_profile)
 end
 
 function _edg_integrated_max_energy_depletion_trajectory(
@@ -511,35 +517,7 @@ function _edg_integrated_max_energy_depletion_trajectory(
     alpha_profile[end] = _edg_at_control_tick(t + final_tau, control_clock.period, control_clock.origin) ?
         max_energy_alpha(positions[end], velocities[end], final_tau) : alpha_past
 
-    h = Vector{Float64}(undef, n)
-    gamma = Vector{Float64}(undef, n)
-    speed = Vector{Float64}(undef, n)
-    rho = Vector{Float64}(undef, n)
-    temperature = Vector{Float64}(undef, n)
-    speed_ratio = Vector{Float64}(undef, n)
-    for j in eachindex(times)
-        env = _edg_targeting_prediction_environment(p, positions[j], velocities[j], t + times[j])
-        radius = max(norm(positions[j]), eps(Float64))
-        vel_norm = max(norm(velocities[j]), eps(Float64))
-        h[j] = env.altitude_m
-        gamma[j] = asin(clamp(dot(positions[j], velocities[j]) / max(radius * vel_norm, eps(Float64)), -1.0, 1.0))
-        speed[j] = env.speed
-        rho[j] = env.rho
-        temperature[j] = env.temperature
-        speed_ratio[j] = env.molecular_speed_ratio
-    end
-    return (
-        time=times,
-        h=h,
-        gamma=gamma,
-        speed=speed,
-        rho=rho,
-        temperature=temperature,
-        speed_ratio=speed_ratio,
-        positions=positions,
-        velocities=velocities,
-        alpha_profile=alpha_profile,
-    )
+    return _edg_prediction_track(p, t, times, positions, velocities, alpha_profile)
 end
 
 function _edg_predict_targeting_outcome(

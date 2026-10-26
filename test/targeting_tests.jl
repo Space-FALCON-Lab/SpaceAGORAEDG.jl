@@ -333,3 +333,43 @@ const RECORDED_TARGETS = (
         @test isapprox(known.track.velocities[idx], recorded.vel2; rtol=RECORDED_RTOL)
     end
 end
+
+@testset "Both targeting strategies preserve sample results and clocks" begin
+    c = _edg_test_context(max_energy_submodes=(:heat_rate,), heat_rate_limit_w_cm2=Inf)
+    c.state.control_clock_period_s = 1 / 3
+    c.state.control_clock_origin_s = 0.1
+    for link in c.spacecraft.links[2:3]; link.α = 0.37; end
+    t = 0.2
+    times = K._edg_targeting_prediction_time_grid(1.07; t0=t, period=1/3, origin=0.1)
+    pos = SVector{3,Float64}(c.u.sc[1].pos)
+    vel = SVector{3,Float64}(c.u.sc[1].vel)
+    for strategy in (:targeting, :max_energy)
+        track = if strategy == :targeting
+            KC._edg_integrated_targeting_trajectory(c.state, c.config, c.p, c.spacecraft,
+                pos, vel, 461.0, t, times, t; heat_rate_control=false, structural_control=false)
+        else
+            KC._edg_integrated_max_energy_depletion_trajectory(c.state, c.config, c.p, c.spacecraft,
+                pos, vel, 461.0, t, times, (Inf, Inf); heat_rate_control=false, structural_control=false)
+        end
+        @test keys(track) == (:time, :h, :gamma, :speed, :rho, :temperature,
+            :speed_ratio, :positions, :velocities, :alpha_profile)
+        @test track.time == times
+        @test track.positions[1] == pos && track.velocities[1] == vel
+        @test track.alpha_profile[1] == 0.37
+        @test track.alpha_profile[end] == track.alpha_profile[end-1] # off the control clock
+        expected_alpha = strategy == :targeting ? c.config.min_alpha_rad : c.config.max_alpha_rad
+        @test all(track.alpha_profile[2:end-1] .== expected_alpha)
+        @test all(length(getfield(track, field)) == length(times) for field in keys(track))
+        for j in eachindex(times)
+            env = probe(S._edg_targeting_prediction_environment, c.p,
+                track.positions[j], track.velocities[j], t + times[j])
+            @test track.h[j] == env.altitude_m
+            @test track.speed[j] == env.speed
+            @test track.rho[j] == env.rho
+            @test track.temperature[j] == env.temperature
+            @test track.speed_ratio[j] == env.molecular_speed_ratio
+            # Independent geometric flight-path-angle check on the returned state.
+            @test sin(track.gamma[j]) ≈ dot(normalize(track.positions[j]), normalize(track.velocities[j])) atol=1e-14
+        end
+    end
+end
