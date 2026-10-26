@@ -123,3 +123,13 @@ checks in an environment seeded from the core's manifest (see
 also runs its existing EDG numerical, lifecycle, native and coverage suites with
 the selected provider. Passing the companion suite alone does not replace those
 checks or the native scientific comparisons.
+
+## Prediction result assembly
+
+The targeting and maximum-energy prediction strategies share
+`_edg_prediction_track` for converting already-integrated samples into returned
+trajectory fields. Integration, alpha selection and guidance/control-clock
+updates remain in each strategy. The helper preserves sample order and derives
+altitude, atmospheric state, speed and flight-path angle using the same service
+queries. Targeting tests exercise both strategies with off-clock initial and final
+samples, including their distinct interior alpha choices.
