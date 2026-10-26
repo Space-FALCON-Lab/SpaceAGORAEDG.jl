@@ -7,75 +7,84 @@ or approach an apoapsis target while evaluating modeled heating and structural
 constraints. SpaceAGORA propagates the spacecraft, evaluates the environment,
 and applies the panel commands.
 
-This is an independently installed companion package. Its numerical guidance
-implementation lives here; the shared configuration types, simulation lifecycle
-and physical state remain in SpaceAGORA. The connection uses the versioned
+This is a separately installed companion package. The numerical guidance lives
+here; the shared configuration types, the simulation lifecycle and the physical
+state stay in SpaceAGORA. The two connect through the versioned
 `SpaceAGORA.EDGServices` interface and Julia's package-extension mechanism.
 
-**The scientific scope is experimental.** The qualified comparison cadence is
-3 Hz. Original physical limits are retained, and measured exceedances are
-reported as violations. The implementation does not establish universal
-constraint satisfaction or exact reproduction of the journal results. Read
-[Scientific status](docs/scientific_status.md) before interpreting a run.
+The scientific scope is experimental. The comparisons were qualified with
+guidance and control at 3 Hz. The original physical limits are kept, and measured
+exceedances are reported as violations. The implementation does not guarantee
+that constraints are always met, and it does not reproduce the journal results
+exactly. Read [Scientific status](docs/scientific_status.md) before interpreting
+a run.
 
 ## Start here
 
-1. Follow [Installation](docs/installation.md) to create an environment with the
-   identified core and companion pair. Julia 1.12 is required.
-2. Read [How EDG works](docs/overview.md) to understand configuration, ownership,
-   units and the meaning of the saved diagnostics.
+1. Follow [Installation](docs/installation.md) to create an environment with a
+   matching SpaceAGORA and companion pair. Julia 1.12 is required.
+2. Read [How EDG works](docs/overview.md) for configuration, ownership, units
+   and the meaning of the saved diagnostics.
 3. Follow [Run and inspect the short example](docs/extension_guide.md#run-and-inspect-the-short-example)
-   for the launch command and result inspection, then consult the
-   [compatibility guide](docs/compatibility.md) when integrating it into a mission.
-4. Use [Extending a study](docs/extension_guide.md) to change a case while preserving
+   to launch the example and read its results, then see the
+   [compatibility guide](docs/compatibility.md) before using EDG in a mission.
+4. Use [Extending a study](docs/extension_guide.md) to change a case while keeping
    a comparison you can interpret.
 
-The [validation record](docs/validation.md) identifies the tested source,
-native comparisons and independent agent walkthroughs, including their limits.
+The [validation record](docs/validation.md) lists the tested sources, the native
+comparisons and the installation walkthroughs, with their limits.
 
-Installing this package does not provide NASA GRAM model data. Native-GRAM
-studies require separately available, authorized model data. The standard
-SpaceAGORA atmosphere route uses a configured GRAMSuite installation; the retained
-comparison recipe below uses its documented lab bridge directly. Synthetic or
-frozen-atmosphere examples should be
-identified as such; they do not qualify a native atmosphere campaign.
-
-The [native reference cases](benchmarks/native_reference/README.md) provide the
-retained depletion, fixed-target and two-pass comparison recipe. They require
-authorized native inputs and use a pinned research fixture; they are separate
-from the public extension interface.
+Installing this package does not provide NASA GRAM model data. Studies with
+native GRAM need separately obtained, authorized model data. SpaceAGORA's
+standard atmosphere route uses a configured GRAMSuite installation; the retained
+[native reference cases](benchmarks/native_reference/README.md) instead call
+GRAM through a small lab-written bridge. They reproduce the depletion,
+fixed-target and two-pass comparisons, need authorized native inputs and a pinned
+research fixture, and are separate from the public extension interface. Label
+synthetic or frozen-atmosphere examples as such; they do not qualify a native
+atmosphere campaign.
 
 ## What is included
 
-The package owns heat-rate and heat-load planning, the structural-load proxy,
-candidate-specific targeting, passage-heat calculations and the numerical
-selection of a panel command. The core adapter retains public type identities
-and calls these algorithms through copied observations and scoped queries.
-There is one active numerical implementation.
+The package holds heat-rate and heat-load planning, the structural-load proxy,
+candidate-specific targeting, the passage-heat calculations and the numerical
+selection of a panel command. SpaceAGORA's adapter keeps the public types and
+calls these algorithms with copied observations and scoped queries. There is one
+active numerical implementation: SpaceAGORA 0.3.0 removed the older E-EDG and
+T-EDG strategy routes from the core.
 
-SpaceAGORA continues to own the integrator, physical heat integrals, atmosphere
-and frame services, callback ordering and panel actuation. The companion does
-not advance or replace the simulator’s physical state or reset physical heat. SpaceAGORA
-removed the older E-EDG and T-EDG strategy routes in
-[SpaceAGORA PR #352](https://github.com/Space-FALCON-Lab/SpaceAGORA.jl/pull/352); from
-that change on, this package is the only EDG implementation.
+SpaceAGORA keeps the integrator, the physical heat integrals, the atmosphere and
+frame services, the callback order and the panel actuation. The companion does
+not advance or replace the simulator's physical state, and does not reset the
+physical heat.
 
-Version 0.2.0 implements `EDGServices` contract 2.0.0, whose decision services take
-the run's EDG state before the configuration. Version 0.3.0 keeps that contract and
-requires SpaceAGORA 0.3 or 0.4; version 0.4.0 keeps it too and requires SpaceAGORA
-0.4 or 0.5. Version 0.5.0 implements contract 3.0.0, which removes two queries this
-package did not call, and requires SpaceAGORA 0.6. Version 0.5.1 keeps that contract
-and its code, and carries the kernel regression tests that SpaceAGORA 0.6.1 no
-longer runs itself. The published v0.1.0 release
-implements contract 1.0.0 with its own pinned core.
+## Versions
+
+| SpaceAGORAEDG | `EDGServices` contract | SpaceAGORA |
+|---|---|---|
+| 0.1.0 | 1.0.0 | its own pinned core revision |
+| 0.2.0 | 2.0.0 | 0.2 and 0.3 |
+| 0.3.0 | 2.0.0 | 0.3 and 0.4 |
+| 0.4.0 | 2.0.0 | 0.4 and 0.5 |
+| 0.5.0 | 3.0.0 | 0.6 |
+| 0.5.1 (tag only) | 3.0.0 | 0.6 |
+| 0.5.1, current `main` | 3.0.0 | 0.6 and 0.7 |
+
+Contract 2.0.0 passes the run's EDG state to the decision services before the
+configuration. Contract 3.0.0 removes two queries this package did not call.
+Version 0.5.1 keeps the 0.5.0 code and adds the kernel regression tests that
+SpaceAGORA 0.6.1 stopped running itself. Support for SpaceAGORA 0.7 is only on
+`main`: the `v0.5.1` tag admits SpaceAGORA 0.6 only and has no GitHub release
+page. SpaceAGORA v0.7.1 records commit `424d8aa8` of this repository, which
+admits 0.7; [Installation](docs/installation.md) shows how to install that pair.
 
 ## Publications and license
 
 The original formulation is Falcone and Putnam's *Energy Depletion Guidance for
-Aerobraking Atmospheric Passes* (2022). The generalized formulation is Simha,
-Yu and Falcone's *Generalized Energy Depletion Guidance for Aerobraking at Mars,
+Aerobraking Atmospheric Passes* (2022). The generalized formulation is Simha, Yu
+and Falcone's *Generalized Energy Depletion Guidance for Aerobraking at Mars,
 Venus, Earth, and Titan* (2026). [References and current limitations](docs/scientific_status.md)
-explain how these relate to the implementation.
+explains how they relate to the implementation.
 
 This package is distributed under the [MIT license](LICENSE). See
-[Source and scientific attribution](NOTICE.md) for provenance.
+[Source and scientific attribution](NOTICE.md) for its origin.
