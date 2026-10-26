@@ -126,10 +126,11 @@ checks or the native scientific comparisons.
 
 ## Prediction result assembly
 
-The targeting and maximum-energy prediction strategies share
-`_edg_prediction_track` for converting already-integrated samples into returned
-trajectory fields. Integration, alpha selection and guidance/control-clock
-updates remain in each strategy. The helper preserves sample order and derives
-altitude, atmospheric state, speed and flight-path angle using the same service
-queries. Targeting tests exercise both strategies with off-clock initial and final
-samples, including their distinct interior alpha choices.
+The targeting and maximum-energy prediction strategies both use the private
+helper `_edg_prediction_track` to turn their integrated samples into the returned
+trajectory fields. Each strategy still does its own integration, panel-angle
+selection and clock handling; the helper keeps the samples in order and derives
+the altitude, atmospheric state, speed and flight-path angle with the same
+service queries for both. `test/targeting_tests.jl` checks both strategies with
+first and last samples that fall between control ticks, including the different
+panel angles each chooses in between.
