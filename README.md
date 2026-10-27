@@ -78,6 +78,14 @@ SpaceAGORA 0.6.1 stopped running itself. Support for SpaceAGORA 0.7 is only on
 page. SpaceAGORA v0.7.1 records commit `424d8aa8` of this repository, which
 admits 0.7; [Installation](docs/installation.md) shows how to install that pair.
 
+## Contributors
+
+- [Giusy Falcone](https://github.com/gfalcon2)
+- [Nihal Simha](https://github.com/NihalSimha)
+- [Evan Yu](https://github.com/EvanY14)
+
+These credits include development in SpaceAGORA before this package was extracted. See [Source and scientific attribution](NOTICE.md) for the earlier contribution history and scientific references.
+
 ## Publications and license
 
 The original formulation is Falcone and Putnam's *Energy Depletion Guidance for
